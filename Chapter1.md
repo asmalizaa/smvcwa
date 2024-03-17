@@ -46,7 +46,7 @@ The table below lists each high-level service, the specification that provides i
     <tr>
         <td>Advanced dependency injection</td>
         <td>Jakarta Contexts and Dependency Injection (CDI) Full</td>
-        <td>web</td>
+        <td>Web</td>
     </tr>
     <tr>
         <td>Validation</td>
@@ -244,7 +244,7 @@ One of the key components of Spring is the AOP framework. While the Spring IoC c
     </tr>
 </table>
 
-Types of advice.
+### Types of Advice
 
 <table>
     <tr><th>Type</th><th>Description</th></tr>
