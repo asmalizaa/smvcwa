@@ -122,6 +122,39 @@ The services we discussed in Jakarta EE Services section are provided by contain
 
 > Container is a commonly used term in computing, but it basically means "that which holds something". In the case of Jakarta EE, the container "holds," or more accurately, executes your code and provides low-level application services, such as dependency injection, transactions, HTTP request handling, REST support, and so on.
 
+The figure below shows how the application code, container, and Jakarta EE Server are related:
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/76dd17b2-657a-43fd-804d-6c680059306c)
+
+In a simple case, an application might look like this:
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/bdb3a56e-d492-453f-9320-5587ea1f5dda)
+
+However, a single Jakarta EE Server can run multiple applications, and applications can communicate with each other remotely. So you can create more complicated scenarios, as shown below:
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/e4726034-ab28-488c-abef-97ec60f55c6f)
+
+> Even though the figures above show communication between multiple Jakarta EE applications, they can and often do communicate with non-Jakarta EE applications via messaging or streaming servers, REST, and so on.
+
+Regardless of how simple or complicated your system architecture is, a key benefit of Jakarta EE is that container services are configurable. This means the same component can behave differently based on where it’s deployed. The container also manages non-configurable services, such as the lifecycle of components, database connection resource pooling, data persistence, and access to the Jakarta EE APIs.
+
+### Jakarta EE Components
+
+Jakarta EE applications are made up of components. 
+- A Jakarta EE component is a self-contained functional unit that makes use of one or more container services.
+- That usage could be as simple as injecting a single dependency or responding to REST requests, or as complicated as injecting multiple dependencies, querying a database, firing and event, and participating in distributed transactions.
+
+Jakarta EE supports the following components:
+- Web components interact with web standards (HTTPS, HTML, WebSocket, and so on) using Jakarta Servlet, Jakarta Faces, Jakarta WebSocket, and related technologies.
+- Business components implement logic necessary to support the business domain using either Enterprise bean components (enterprise beans)[3] or CDI managed beans.
+  - For new applications, business components should be implemented using CDI managed beans, unless you need Enterprise bean-specific features such as transactions, role-based security, messaging driven beans, or remote execution. The two technologies play well together.
+
+All of these components run on the server, and are ordinary Java classes written with Jakarta EE annotations (or optionally, external configuration files called deployment descriptors).
+
+### How do I get Jakarta EE?
+
+Since Jakarta EE is an open-source industry standard, there are multiple implementations. A good place to start is the [Jakarta EE Starter](https://start.jakarta.ee/), which lets you quickly generate a sample starter app using one of the supported Jakarta EE servers. You can also find the most recent list of servers on the [Jakarta EE website](https://jakarta.ee/compatibility/).
+
 Enter the Framework
 
 Spring Value Proposition
