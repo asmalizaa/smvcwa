@@ -110,9 +110,17 @@ The table below lists each high-level service, the specification that provides i
     </tr>
 </table>
 
-Web Applications
+As you work with Jakarta EE, you’ll encounter other services that support the ones listed above.
 
-Persistence Support
+Each service is provided by one or more APIs, which are defined in Jakarta EE specifications. The specifications provide details for users and implementors of the service. You can find a [full list of the Jakarta EE specifications](https://jakarta.ee/specifications/) on the Jakarta EE site.
+
+## Jakarta EE Containers and Servers
+
+The services we discussed in Jakarta EE Services section are provided by container. 
+- A Jakarta EE Server is software that runs the container, deploys applications into it, and provides administration and additional features.
+- Jakarta EE Servers run stand-alone, but many implementations also support the ability to generate a single "fat", executable Java Archive (JAR) file that includes all the code necessary to run the application.
+
+> Container is a commonly used term in computing, but it basically means "that which holds something". In the case of Jakarta EE, the container "holds," or more accurately, executes your code and provides low-level application services, such as dependency injection, transactions, HTTP request handling, REST support, and so on.
 
 Enter the Framework
 
