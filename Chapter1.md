@@ -155,11 +155,53 @@ All of these components run on the server, and are ordinary Java classes written
 
 Since Jakarta EE is an open-source industry standard, there are multiple implementations. A good place to start is the [Jakarta EE Starter](https://start.jakarta.ee/), which lets you quickly generate a sample starter app using one of the supported Jakarta EE servers. You can also find the most recent list of servers on the [Jakarta EE website](https://jakarta.ee/compatibility/).
 
-Enter the Framework
+## Enter the Framework
 
-Spring Value Proposition
+Prior to the advent of Enterprise Java Beans (EJB), Java developers needed to use JavaBeans to create Web applications. 
+- Although JavaBeans helped in the development of user interface (UI) components, they were not able to provide services, such as transaction management and security, which were required for developing robust and secure enterprise applications.
+- The advent of EJB was seen as a solution to this problem EJB extends the Java components, such as Web and enterprise components, and provides services that help in enterprise application development.
+- However, developing an enterprise application with EJB was not easy, as the developer needed to perform various tasks, such as creating Home and Remote interfaces and implementing lifecycle callback methods which lead to the complexity of providing code for EJBs.
+- Due to this complication, developers started looking for an easier way to develop enterprise applications.
 
-The Spring Container
+## Spring Value Proposition
 
-Aspect-Oriented Programming
+The Spring framework (which is commonly known as Spring) has emerged as a solution to all these complications. 
+- This framework uses various new techniques such as Aspect-Oriented Programming (AOP), Plain Old Java Object (POJO), and dependency injection (DI), to develop enterprise applications, thereby removing the complexities involved while developing enterprise applications using EJB.
+- Spring is an open source lightweight framework that allows Jakarta EE developers to build simple, reliable, and scalable enterprise applications.
+- This framework mainly focuses on providing various ways to help you manage your business objects.
+- It made the development of Web applications much easier as compared to classic Java frameworks and Application Programming Interfaces (APIs), such as Java database connectivity(JDBC), JavaServer Pages(JSP), and Java Servlet.
+- The Spring framework can be considered as a collection of sub-frameworks, also called layers, such as Spring AOP, Spring Object-Relational Mapping (Spring ORM), Spring Web Flow, and Spring Web MVC.
+- It is a lightweight application framework used for developing enterprise applications.
+- You can use any of these modules separately while constructing a Web application.
+- The modules may also be grouped together to provide better functionalities in a Web application.
+- Spring framework is loosely coupled because of dependency Injection.
+
+A key element of Spring is infrastructural support at the application level: Spring focuses on the "plumbing" of enterprise applications so that teams can focus on application-level business logic, without unnecessary ties to specific deployment environments.
+
+## The Spring Framework Modules
+
+The Spring Framework consists of features organized into about 20 modules. These modules are grouped into Core Container, Data Access/Integration, Web, AOP (Aspect Oriented Programming), Instrumentation, and Test, as shown in the following diagram.
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/d026c166-89e2-49e4-b474-9a67941fdc01)
+
+For more details, please go to [this official page](https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/overview.html).
+
+### Container overview
+
+The interface org.springframework.context.ApplicationContext represents the Spring IoC container and is responsible for instantiating, configuring, and assembling the aforementioned beans. 
+- The container gets its instructions on what objects to instantiate, configure, and assemble by reading configuration metadata.
+- The configuration metadata is represented in XML, Java annotations, or Java code.
+- It allows you to express the objects that compose your application and the rich interdependencies between such objects.
+
+The following diagram is a high-level view of how Spring works. Your application classes are combined with configuration metadata so that after the ApplicationContext is created and initialized, you have a fully configured and executable system or application.
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/661fc117-dc9b-4d26-9e2d-76e7a58e411c)
+
+## Aspect-Oriented Programming
  
+Aspect-Oriented Programming (AOP) complements Object-Oriented Programming (OOP) by providing another way of thinking about program structure. 
+- The key unit of modularity in OOP is the class, whereas in AOP the unit of modularity is the aspect.
+- **Aspects** enable the modularization of concerns such as transaction management that cut across multiple types and objects.
+- Such concerns are often termed **crosscutting** concerns in AOP literature.
+
+One of the key components of Spring is the AOP framework. While the Spring IoC container does not depend on AOP, meaning you do not need to use AOP if you don't want to, AOP complements Spring IoC to provide a very capable middleware solution.
