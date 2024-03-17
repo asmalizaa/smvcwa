@@ -443,9 +443,9 @@ To run the project, right-click then select Run As > Java Application
 
 Check the Console tab, verify the output looks like below.
 
-> John
-> Bob
-> both refers to the same object
-> com.example.smvcwa.HelloWorld@2806b2e3
-> com.example.smvcwa.HelloWorld@2806b2e3
+> John<br/>
+> Bob<br/>
+> both refers to the same object<br/>
+> com.example.smvcwa.HelloWorld@2806b2e3<br/>
+> com.example.smvcwa.HelloWorld@2806b2e3<br/>
 
