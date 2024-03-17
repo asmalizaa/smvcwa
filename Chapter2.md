@@ -449,3 +449,37 @@ Check the Console tab, verify the output looks like below.
 > com.example.smvcwa.HelloWorld@2806b2e3<br/>
 > com.example.smvcwa.HelloWorld@2806b2e3<br/>
 
+**Prototype Scope**
+
+If the scope is declared prototype, then spring IOC container will create a new instance of that bean every time a request is made for that specific bean. 
+- A request can be made to the bean instance either programmatically using getBean() method or by XML for Dependency Injection of secondary type.
+- Generally, we use the prototype scope for all beans that are stateful, while the singleton scope is used for the stateless beans.
+
+**Prototype Scope Example**
+
+Use the previous example, but update the configuration file to look like below. Specifically to add the @Scope annotation.
+
+```java
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+
+@Configuration
+public class HelloBeanConfig {
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public HelloWorld singleServiceBean() {
+		return new HelloWorld();
+	}
+}
+```
+
+Rerun the project and verify this time the output looks like below.
+
+> John<br/>
+> Bob<br/>
+> nope, they're not the same<br/>
+> com.example.smvcwa.HelloWorld@28a2bd68<br/>
+> com.example.smvcwa.HelloWorld@430f90f8<br/>
