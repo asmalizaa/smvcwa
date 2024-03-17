@@ -291,4 +291,140 @@ public CommandManager commandManager() {
 }
 ```
 
+## Combining Java and XML Configuration
 
+Spring’s @Configuration class support does not aim to be a 100% complete replacement for Spring XML. Some facilities, such as Spring XML namespaces, remain an ideal way to configure the container. In cases where XML is convenient or necessary, you have a choice: either instantiate the container in an "XML-centric" way by using, for example, ClassPathXmlApplicationContext, or instantiate it in a "Java-centric" way by using AnnotationConfigApplicationContext and the @ImportResource annotation to import XML as needed.
+
+### XML-centric Use of @Configuration Classes
+
+It may be preferable to bootstrap the Spring container from XML and include @Configuration classes in an ad-hoc fashion. For example, in a large existing codebase that uses Spring XML, it is easier to create @Configuration classes on an as-needed basis and include them from the existing XML files. Later in this section, we cover the options for using @Configuration classes in this kind of “XML-centric” situation.
+
+Remember that @Configuration classes are ultimately bean definitions in the container. In this series examples, we create a @Configuration class named AppConfig and include it within system-test-config.xml as a <bean/> definition. Because <context:annotation-config/> is switched on, the container recognizes the @Configuration annotation and processes the @Bean methods declared in AppConfig properly.
+
+The following example shows an ordinary configuration class in Java:
+
+```java
+@Configuration
+public class AppConfig {
+
+	@Autowired
+	private DataSource dataSource;
+
+	@Bean
+	public AccountRepository accountRepository() {
+		return new JdbcAccountRepository(dataSource);
+	}
+
+	@Bean
+	public TransferService transferService() {
+		return new TransferService(accountRepository());
+	}
+}
+```
+
+The following example shows part of a sample system-test-config.xml file:
+
+```xml
+<beans>
+	<!-- enable processing of annotations such as @Autowired and @Configuration -->
+	<context:annotation-config/>
+	<context:property-placeholder location="classpath:/com/acme/jdbc.properties"/>
+
+	<bean class="com.acme.AppConfig"/>
+
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+</beans>
+```
+
+The following example shows a possible jdbc.properties file:
+
+```
+jdbc.url=jdbc:hsqldb:hsql://localhost/xdb
+jdbc.username=sa
+jdbc.password=
+```
+
+Then, in the application class, you need to configure the application to load the xml configurations file.
+
+```
+public static void main(String[] args) {
+	ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:/com/acme/system-test-config.xml");
+	TransferService transferService = ctx.getBean(TransferService.class);
+	// ...
+}
+```
+
+Because @Configuration is meta-annotated with @Component, @Configuration-annotated classes are automatically candidates for component scanning. Using the same scenario as described in the previous example, we can redefine system-test-config.xml to take advantage of component-scanning. Note that, in this case, we need not explicitly declare <context:annotation-config/>, because <context:component-scan/> enables the same functionality.
+
+The following example shows the modified system-test-config.xml file:
+
+```xml
+<beans>
+	<!-- picks up and registers AppConfig as a bean definition -->
+	<context:component-scan base-package="com.acme"/>
+	<context:property-placeholder location="classpath:/com/acme/jdbc.properties"/>
+
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+</beans>
+```
+
+### @Configuration Class-centric Use of XML with @ImportResource
+
+In applications where @Configuration classes are the primary mechanism for configuring the container, it is still likely necessary to use at least some XML. In these scenarios, you can use @ImportResource and define only as much XML as you need. Doing so achieves a “Java-centric” approach to configuring the container and keeps XML to a bare minimum. The following example (which includes a configuration class, an XML file that defines a bean, a properties file, and the main class) shows how to use the @ImportResource annotation to achieve “Java-centric” configuration that uses XML as needed:
+
+```java
+@Configuration
+@ImportResource("classpath:/com/acme/properties-config.xml")
+public class AppConfig {
+
+	@Value("${jdbc.url}")
+	private String url;
+
+	@Value("${jdbc.username}")
+	private String username;
+
+	@Value("${jdbc.password}")
+	private String password;
+
+	@Bean
+	public DataSource dataSource() {
+		return new DriverManagerDataSource(url, username, password);
+	}
+}
+```
+
+Here's the properties-config.xml file.
+
+```xml
+properties-config.xml
+<beans>
+	<context:property-placeholder location="classpath:/com/acme/jdbc.properties"/>
+</beans>
+```
+
+The properties file may look like below.
+
+```
+jdbc.properties
+jdbc.url=jdbc:hsqldb:hsql://localhost/xdb
+jdbc.username=sa
+jdbc.password=
+```
+
+And the application class.
+
+```java
+public static void main(String[] args) {
+	ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+	TransferService transferService = ctx.getBean(TransferService.class);
+	// ...
+}
+```
