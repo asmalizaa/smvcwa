@@ -306,3 +306,146 @@ public class AppConfig {
 However, this limits the visibility for advance type prediction to the specified interface type (TransferService). Then, with the full type (TransferServiceImpl) known to the container only once the affected singleton bean has been instantiated. Non-lazy singleton beans get instantiated according to their declaration order, so you may see different type matching results depending on when another component tries to match by a non-declared type (such as @Autowired TransferServiceImpl, which resolves only once the transferService bean has been instantiated).
 
 ## Singletons and Prototypes
+
+Bean Scopes refers to the lifecycle of Bean that means when the object of Bean will be instantiated, how long does that object live, and how many objects will be created for that bean throughout. Basically, it controls the instance creation of the bean and it is managed by the spring container.
+
+The spring framework provides five scopes for a bean. We can use three of them only in the context of web-aware Spring ApplicationContext and the rest of the two is available for both IoC container and Spring-MVC container. The following are the different scopes provided for a bean: 
+
+<table>
+	<tr><th>Scope</th><th>Description</th></tr>
+	<tr>
+		<td>Singleton</td>
+		<td>Only one instance will be created for a single bean definition per Spring IoC container and the same object will be shared for each request made for that bean.</td>
+	</tr>
+	<tr>
+		<td>Prototype</td>
+		<td>A new instance will be created for a single bean definition every time a request is made for that bean.</td>
+	</tr>
+	<tr>
+		<td>Request</td>
+		<td>A new instance will be created for a single bean definition every time an HTTP request is made for that bean. But Only valid in the context of a web-aware Spring ApplicationContext.</td>
+	</tr>
+	<tr>
+		<td>Session</td>
+		<td>Scopes a single bean definition to the lifecycle of an HTTP Session. But Only valid in the context of a web-aware Spring ApplicationContext.</td>
+	</tr>
+	<tr>
+		<td>Global-Session</td>
+		<td>Scopes a single bean definition to the lifecycle of a global HTTP Session. It is also only valid in the context of a web-aware Spring ApplicationContext.</td>
+	</tr>
+</table>
+
+**Singleton Scope**
+
+The singleton scope is the default scope in Spring Boot. 
+- It tells the Spring container to create and manage a single instance of a bean per Spring IoC container.
+- The same instance is returned every time it is needed.
+- This approach is memory efficient as it reuses the bean across the application.
+
+**When to Use Singleton Scope?**
+
+- **Shared Resources**: Use singleton for beans that act as shared resources, such as a database connection pool or a configuration manager.
+- **Stateless Services**: For services that are stateless, where each method doesn’t depend on instance fields.
+- **Utilities and Helpers**: Classes that provide utility functions or helper methods can be managed as singletons since they don’t maintain state.
+
+**Singleton Scope Example**
+
+To continue with this example, create a new project using [Spring Initialzr](https://start.spring.io/) with below configurations.
+
+- Project: Maven
+- Language: Java
+- Spring Boot: default
+- Group: default
+- Artifact: firstdemo
+- Name: firstdemo
+- Description: default
+- Package Name: com.example.firstdemo
+- Packaging: jar
+- Java: 21 (or choose the version installed on your machine)
+- Dependencies: Spring Web, Spring Boot DevTools
+
+Generate the project. Once the generated file downloaded, extract and import into your eclipse. 
+
+Lets first create a bean (i.e.), the backbone of the application in the spring framework. 
+
+```java
+public class HelloWorld {
+	public String name;
+
+	// Create a setter method to
+	// set the value passed by user
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	// Create a getter method so that
+	// the user can get the set value
+	public String getName() {
+		return name;
+	}
+}
+```
+
+Next, create the configuration file to be used by the container to scan for any injectable components.
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class HelloBeanConfig {
+
+	@Bean
+	public HelloWorld singleServiceBean() {
+		return new HelloWorld();
+	}
+}
+```
+
+Finally, update the application class to contain below codes.
+
+```java
+@SpringBootApplication
+public class FirstDemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(FirstDemoApplication.class, args);
+
+		// get the application context
+		ApplicationContext ctx = new AnnotationConfigApplicationContext(HelloBeanConfig.class);
+
+		// get the first object
+		HelloWorld hello1 = (HelloWorld) ctx.getBean(HelloWorld.class);
+		hello1.setName("John");
+		System.out.println(hello1.getName());
+
+		// get the second object
+		HelloWorld hello2 = (HelloWorld) ctx.getBean(HelloWorld.class);
+		hello2.setName("Bob");
+		System.out.println(hello2.getName());
+
+		// compare both object to check if they're the same
+		if (hello1 == hello2) {
+			System.out.println("both refers to the same object");
+		} else {
+			System.out.println("nope, they're not the same");
+		}
+
+		// print out the references
+		System.out.println(hello1);
+		System.out.println(hello2);
+	}
+
+}
+```
+
+To run the project, right-click then select Run As > Java Application
+
+Check the Console tab, verify the output looks like below.
+
+> John
+> Bob
+> both refers to the same object
+> com.example.smvcwa.HelloWorld@2806b2e3
+> com.example.smvcwa.HelloWorld@2806b2e3
+
