@@ -18,5 +18,6 @@
 # Setup
 
 1. [JDK](https://www.oracle.com/my/java/technologies/downloads/#jdk21-windows)
-2. [Eclipse](https://www.eclipse.org/downloads/)
+   - Choose installer for your respective platform.
+3. [Eclipse](https://www.eclipse.org/downloads/)
    - For installation, choose > Eclipse IDE for Enterprise Java and Web Developer
