@@ -378,7 +378,7 @@ In this example, we are going to create two JavaBean classes, configure the bean
 
 1. Create a Java class named Transmission.java
    ```java
-   package com.example.di;
+   package com.example.beans;
 
    public class Transmission {
    	private final String type;
@@ -396,7 +396,7 @@ In this example, we are going to create two JavaBean classes, configure the bean
    ```
 2. Create the second Java class named Engine.java
    ```java
-   package com.example.di;
+   package com.example.beans;
 
    public class Engine {
    	private final String type;
@@ -416,14 +416,14 @@ In this example, we are going to create two JavaBean classes, configure the bean
    ```
 3. Next create another Java class named Config.java, this will be the configuration class where we are going to register the beans.
    ```java
-   package com.example.di;
+   package com.example.beans;
 
    import org.springframework.context.annotation.Bean;
    import org.springframework.context.annotation.ComponentScan;
    import org.springframework.context.annotation.Configuration;
 
    @Configuration
-   @ComponentScan("com.example.di")
+   @ComponentScan("com.example.beans")
    public class Config {
 
    	@Bean
@@ -439,7 +439,7 @@ In this example, we are going to create two JavaBean classes, configure the bean
    ```
 4. Now it's time to create the component class, create a Java class named Car.java
    ```java
-   package com.example.di;
+   package com.example.beans;
 
    import org.springframework.beans.factory.annotation.Autowired;
    import org.springframework.stereotype.Component;
@@ -463,7 +463,8 @@ In this example, we are going to create two JavaBean classes, configure the bean
    ```
 5. Finally, the application class named AppRunner.java
    ```java
-   package com.example.di;
+   package com.example.beans;
+   
    import org.springframework.boot.autoconfigure.SpringBootApplication;
    import org.springframework.context.ApplicationContext;
    import org.springframework.context.annotation.AnnotationConfigApplicationContext;
