@@ -864,6 +864,14 @@ The following example shows access to the systemProperties bean as a SpEL variab
 
 Note that you do not have to prefix the predefined variable with the # symbol here.
 
+Add this codes to SpelBeanApp.java to test it.
+
+```java
+TaxCalculator taxCalc = context.getBean(TaxCalculator.class);
+System.out.println(taxCalc.getDefaultLocale());
+```
+> MY
+
 You can also refer to other bean properties by name, as the following example shows:
 
 ```xml
