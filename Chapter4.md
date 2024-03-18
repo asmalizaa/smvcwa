@@ -857,10 +857,8 @@ All beans in the application context are available as predefined variables with 
 The following example shows access to the systemProperties bean as a SpEL variable:
 
 ```xml
-<bean id="taxCalculator" class="org.spring.samples.TaxCalculator">
-	<property name="defaultLocale" value="#{ systemProperties['user.region'] }"/>
-
-	<!-- other properties -->
+<bean id="taxCalculator" class="com.example.spel.TaxCalculator">
+	<property name="defaultLocale"	value="#{ systemProperties['user.country'] }" />
 </bean>
 ```
 
