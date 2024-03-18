@@ -572,3 +572,182 @@ Hi, good morning have a nice day!.
 Hi, good morning have a nice day!.
 PreDestroy second invoked...
 ```
+
+## Spring Expression Language (SpEL)
+
+Reference: (https://docs.spring.io/spring-framework/reference/core/expressions.html)
+
+The Spring Expression Language ("SpEL" for short) is a powerful expression language that supports querying and manipulating an object graph at runtime. The language syntax is similar to the Jakarta Expression Language but offers additional features, most notably method invocation and basic string templating functionality.
+
+The following code demonstrates how to use the SpEL API to evaluate the literal string expression, Hello World.
+
+```java
+package com.example.spel;
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+
+@SpringBootApplication
+public class SpelApp {
+
+	public static void main(String[] args) {
+		ExpressionParser parser = new SpelExpressionParser();
+		Expression exp = parser.parseExpression("'Hello World'");
+		String message = (String) exp.getValue();
+		System.out.println(message);
+	}
+
+}
+```
+> The value of the message variable is "Hello World".
+
+The SpEL classes and interfaces you are most likely to use are located in the org.springframework.expression package and its sub-packages, such as spel.support.
+
+- The ExpressionParser interface is responsible for parsing an expression string.
+- In the preceding example, the expression string is a string literal denoted by the surrounding single quotation marks.
+- The Expression interface is responsible for evaluating the defined expression string.
+- The two types of exceptions that can be thrown when calling parser.parseExpression(…​) and exp.getValue(…​) are ParseException and EvaluationException, respectively.
+
+In the following method invocation example, we call the concat method on the string literal, Hello World.
+
+```java
+package com.example.spel;
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+
+@SpringBootApplication
+public class SpelApp {
+
+	public static void main(String[] args) {
+		ExpressionParser parser = new SpelExpressionParser();
+		Expression exp = parser.parseExpression("'Hello World'.concat('!')");
+		String message = (String) exp.getValue();
+		System.out.println(message);
+	}
+
+}
+```
+> 	The value of message is now "Hello World!".
+
+The following example demonstrates how to access the Bytes JavaBean property of the string literal, Hello World.
+
+```java
+ExpressionParser parser = new SpelExpressionParser();
+
+// invokes 'getBytes()'
+Expression exp = parser.parseExpression("'Hello World'.bytes");
+byte[] bytes = (byte[]) exp.getValue();
+System.out.println(bytes);
+```
+> This line converts the literal to a byte array.
+
+SpEL also supports nested properties by using the standard dot notation (such as prop1.prop2.prop3) as well as the corresponding setting of property values. Public fields may also be accessed.
+
+The following example shows how to use dot notation to get the length of a string literal.
+
+```java
+ExpressionParser parser = new SpelExpressionParser();
+
+// invokes 'getBytes().length'
+Expression exp = parser.parseExpression("'Hello World'.bytes.length");
+int length = (Integer) exp.getValue();
+System.out.println(length);
+```
+> 'Hello World'.bytes.length gives the length of the literal -> 11
+
+The String’s constructor can be called instead of using a string literal, as the following example shows.
+
+```java
+ExpressionParser parser = new SpelExpressionParser();
+Expression exp = parser.parseExpression("new String('hello world').toUpperCase()");
+String message = exp.getValue(String.class);
+System.out.println(message);
+```
+> Construct a new String from the literal and convert it to upper case -> HELLO WORLD
+
+The more common usage of SpEL is to provide an expression string that is evaluated against a specific object instance (called the root object). The following example shows how to retrieve the name property from an instance of the Inventor class and how to reference the name property in a boolean expression.
+
+```java
+package com.example.spel;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+
+@SpringBootApplication
+public class SpelObjectApp {
+
+	public static void main(String[] args) {
+		// Create and set a calendar
+		GregorianCalendar c = new GregorianCalendar();
+		c.set(1856, 7, 9);
+
+		// The constructor arguments are name, birthday, and nationality.
+		Inventor tesla = new Inventor("Nikola Tesla", c.getTime(), "Serbian");
+
+		ExpressionParser parser = new SpelExpressionParser();
+
+		Expression exp = parser.parseExpression("name"); // Parse name as an expression
+		String name = (String) exp.getValue(tesla);
+		System.out.println(name);
+
+		exp = parser.parseExpression("name == 'Nikola Tesla'");
+		boolean result = exp.getValue(tesla, Boolean.class);
+		System.out.println(result);
+	}
+
+}
+```
+
+And here's the class Inventor.java
+
+```java
+class Inventor {
+	private String name;
+	private Date birthdate;
+	private String nationality;
+
+	public Inventor(String name, Date birthdate, String nationality) {
+		this.name = name;
+		this.birthdate = birthdate;
+		this.birthdate = birthdate;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
+	}
+
+	public String getNationality() {
+		return nationality;
+	}
+
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
+}
+```
+> Nikola Tesla<br/>
+> true
+
+
