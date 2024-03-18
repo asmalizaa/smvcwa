@@ -111,26 +111,63 @@ The Factory Design Pattern aims to create objects without specifying the exact c
 
 **Factory Method Pattern**
 
-Let’s illustrate this pattern with an example. Imagine we’re developing an application for a vehicle manufacturer. Initially, we only deal with vehicles powered by fuel-only engines. To maintain SRP and OCP, we’ll use the factory method design pattern. Here’s a simplified UML diagram for this pattern: !Factory Method UML Diagram Key concepts related to this pattern:
+Let’s illustrate this pattern with an example. Imagine we’re developing an application for a vehicle manufacturer. Initially, we only deal with vehicles powered by fuel-only engines. To maintain SRP and OCP, we’ll use the factory method design pattern. 
+
+Here’s a simplified UML diagram for this pattern: 
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/7f262ea7-5683-4d24-b13b-effce8d3f43f)
+
 
 - The MotorVehicle interface defines a method called build(), responsible for constructing a specific motor vehicle.
 - Concrete classes like Motorcycle and Car implement this interface and provide their own build() implementations.
 
+To continue with this example, create a new project using [Spring Initialzr](https://start.spring.io/) with below configurations.
+
+- Project: Maven
+- Language: Java
+- Spring Boot: default
+- Group: default
+- Artifact: firstdemo
+- Name: firstdemo
+- Description: default
+- Package Name: com.example.firstdemo
+- Packaging: jar
+- Java: 21 (or choose the version installed on your machine)
+- Dependencies: Spring Web, Spring Boot DevTools
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/cdac6b6a-0326-44f7-9adf-929dc28ce2e8)
+
+Generate the project. Once the generated file downloaded, extract and import into your eclipse. 
+
 Let’s look at some code snippets:
 
+1. Create a Java interface named MotorVehicle.java
+   ```java
+   // MotorVehicle interface
+   public interface MotorVehicle {
+   	void build();
+   }
+   ```
+2. Create a Java class named Motorcycle that implements MotorVehicle interface.
+   ```java
+   // Concrete class: Motorcycle
+   public class Motorcycle implements MotorVehicle {
+   	@Override
+   	public void build() {
+   		System.out.println("Build Motorcycle");
+   	}
+   }
+   ```
+3. Create another Java class named Car that implements MotorVehicle interface.
+6. Create a Java class named MotorVehicleFactory and update the codes as below.
+7. Create a Java class named MotorcycleFactory.
+8. Create a Java class named CarFactory.
+9. Create anpther Java class named VehicleController and update the codes as below.
+   
 ```java
-// MotorVehicle interface
-public interface MotorVehicle {
-    void build();
-}
 
-// Concrete class: Motorcycle
-public class Motorcycle implements MotorVehicle {
-    @Override
-    public void build() {
-        System.out.println("Build Motorcycle");
-    }
-}
+
+
 
 // Concrete class: Car
 public class Car implements MotorVehicle {
@@ -349,6 +386,8 @@ The singleton scope is the default scope in Spring Boot.
 - **Utilities and Helpers**: Classes that provide utility functions or helper methods can be managed as singletons since they don’t maintain state.
 
 **Singleton Scope Example**
+
+Note: If you already have a spring project created earlier, you can continue using the same project.
 
 To continue with this example, create a new project using [Spring Initialzr](https://start.spring.io/) with below configurations.
 
