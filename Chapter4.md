@@ -750,4 +750,143 @@ class Inventor {
 > Nikola Tesla<br/>
 > true
 
+## Expressions in Bean Definitions
+
+You can use SpEL expressions with XML-based or annotation-based configuration metadata for defining BeanDefinition instances. In both cases, the syntax to define the expression is of the form #{ <expression string> }.
+
+### XML Configuration
+
+To continue with next example, add a beans.xml file to your project. Right-click **src/main/resources** folder > New > Other > type 'XML' in the filter box > select 'XML File' then click 'Next' > Enter file  name: beans.xml > click Finish
+
+Once created, copy codes below and paste it into beans.xml file.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="student" class="com.example.spel.Student">
+		<property name="name" value="Test"></property>
+	</bean>
+</beans>
+```
+
+A property or constructor argument value can be set by using expressions, as you can see above:
+
+Next, create a Java class named Student.java with below codes.
+
+```java
+package com.example.spel;
+
+public class Student {
+	private String name;
+
+	public Student() {
+
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+}
+```
+
+In order for the xml configurations to work, you need to import it into the configuration class so spring container can locate it.
+
+```java
+package com.example.spel;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
+
+@Configuration
+@ImportResource("classpath:beans.xml")
+public class SpringBootXmlApplication implements CommandLineRunner {
+
+	@Bean(name = "student")
+	public Student getStudent() {
+		return new Student();
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootXmlApplication.class, args);
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		
+	}
+}
+```
+
+Now we can test it. Create the application class as below.
+
+```java
+package com.example.spel;
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+@SpringBootApplication
+public class SpelBeanApp {
+
+	public static void main(String[] args) {
+		ApplicationContext context = new AnnotationConfigApplicationContext(SpringBootXmlApplication.class);
+
+		Student student = context.getBean(Student.class);
+		System.out.println(student.getName());
+	}
+
+}
+```
+> Test
+
+All beans in the application context are available as predefined variables with their common bean name. This includes standard context beans such as environment (of type org.springframework.core.env.Environment) as well as systemProperties and systemEnvironment (of type Map<String, Object>) for access to the runtime environment.
+
+The following example shows access to the systemProperties bean as a SpEL variable:
+
+```xml
+<bean id="taxCalculator" class="org.spring.samples.TaxCalculator">
+	<property name="defaultLocale" value="#{ systemProperties['user.region'] }"/>
+
+	<!-- other properties -->
+</bean>
+```
+
+Note that you do not have to prefix the predefined variable with the # symbol here.
+
+You can also refer to other bean properties by name, as the following example shows:
+
+```xml
+<bean id="numberGuess" class="org.spring.samples.NumberGuess">
+	<property name="randomNumber" value="#{ T(java.lang.Math).random() * 100.0 }"/>
+
+	<!-- other properties -->
+</bean>
+
+<bean id="shapeGuess" class="org.spring.samples.ShapeGuess">
+	<property name="initialShapeSeed" value="#{ numberGuess.randomNumber }"/>
+
+	<!-- other properties -->
+</bean>
+```
+
+### Annotation Configuration
+To specify a default value, you can place the @Value annotation on fields, methods, and method or constructor parameters.
+
+The following example sets the default value of a field:
+
+```java
+
 
