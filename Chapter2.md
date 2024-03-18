@@ -13,8 +13,10 @@ A simple example of JavaBean Class is mentioned below:
 
 ```java
 // Java program to illustrate the structure of JavaBean class
-public class TestBean {
+public class User implements java.io.Serializable {
 	private String name;
+
+	public User() { }
 
 	public void setName(String name) { 
 	    this.name = name; 
@@ -86,7 +88,7 @@ Code below is an example of the usage of a JavaBean.
 // Java program to access JavaBean class
 
 // Driver Class
-public class Test {
+public class TestStudent {
 	// main function
 	public static void main(String args[])
 	{
