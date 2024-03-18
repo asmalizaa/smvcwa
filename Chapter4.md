@@ -894,5 +894,81 @@ To specify a default value, you can place the @Value annotation on fields, metho
 The following example sets the default value of a field:
 
 ```java
+package com.example.spel;
 
+import org.springframework.beans.factory.annotation.Value;
 
+public class FieldValueTestBean {
+
+	@Value("#{ systemProperties['user.name'] }")
+	private String defaultUser;
+
+	public String getDefaultUser() {
+		return defaultUser;
+	}
+
+	public void setDefaultUser(String defaultUser) {
+		this.defaultUser = defaultUser;
+	}
+
+}
+```
+
+Register the bean in SpringBootXmlApplication.java by adding this codes.
+
+```java
+@Bean
+public FieldValueTestBean getFieldValueTestBean() {
+	return new FieldValueTestBean();
+}
+---
+
+Add this codes to application class to test it.
+
+```java
+FieldValueTestBean bean = context.getBean(FieldValueTestBean.class);
+System.out.println(bean.getDefaultUser());
+```
+> Asmaliza
+
+The following example shows the equivalent but on a property setter method:
+
+```java
+package com.example.spel;
+
+import org.springframework.beans.factory.annotation.Value;
+
+public class FieldValueTestBean {
+
+	private String defaultUser;
+
+	public String getDefaultUser() {
+		return defaultUser;
+	}
+
+	@Value("#{ systemProperties['user.name'] }")
+	public void setDefaultUser(String defaultUser) {
+		this.defaultUser = defaultUser;
+	}
+
+}
+```
+
+Autowired methods and constructors can also use the @Value annotation, as the following examples show:
+
+```java
+public class SimpleMovieLister {
+
+	private MovieFinder movieFinder;
+	private String defaultLocale;
+
+	@Autowired
+	public void configure(MovieFinder movieFinder,
+			@Value("#{ systemProperties['user.region'] }") String defaultLocale) {
+		this.movieFinder = movieFinder;
+		this.defaultLocale = defaultLocale;
+	}
+
+	// ...
+}
+```
