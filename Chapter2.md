@@ -207,7 +207,7 @@ Let’s look at some code snippets:
    	}
    }
    ```
-7. Create anpther Java class named VehicleController and update the codes as below.
+7. Create another Java class named VehicleController and update the codes as below.
    ```java
    import org.springframework.beans.factory.annotation.Autowired;
    import org.springframework.beans.factory.annotation.Qualifier;
