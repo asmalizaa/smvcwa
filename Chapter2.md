@@ -159,51 +159,77 @@ Let’s look at some code snippets:
    }
    ```
 3. Create another Java class named Car that implements MotorVehicle interface.
-6. Create a Java class named MotorVehicleFactory and update the codes as below.
-7. Create a Java class named MotorcycleFactory.
-8. Create a Java class named CarFactory.
-9. Create anpther Java class named VehicleController and update the codes as below.
+   ```java
+   // Concrete class: Car
+   public class Car implements MotorVehicle {
+   	@Override
+   	public void build() {
+   		System.out.println("Build Car");
+   	}
+   }
+   ```
+4. Create a Java class named MotorVehicleFactory and update the codes as below.
+   ```java
+   // MotorVehicleFactory (abstract class)
+   public abstract class MotorVehicleFactory {
+   	public MotorVehicle create() {
+   		MotorVehicle vehicle = createMotorVehicle();
+   		vehicle.build();
+   		return vehicle;
+   	}
+
+   	protected abstract MotorVehicle createMotorVehicle();
+   }
+   ```
+5. Create a Java class named MotorcycleFactory.
+   ```java
+   import org.springframework.stereotype.Component;
    
-```java
+   // Specific factory: MotorcycleFactory
+   @Component("motor")
+   public class MotorcycleFactory extends MotorVehicleFactory {
+   	@Override
+   	protected MotorVehicle createMotorVehicle() {
+   		return new Motorcycle();
+   	}
+   }
+   ```
+6. Create a Java class named CarFactory.
+   ```java
+   import org.springframework.stereotype.Component;
+   
+   // Specific factory: CarFactory
+   @Component("car")
+   public class CarFactory extends MotorVehicleFactory {
+   	@Override
+   	protected MotorVehicle createMotorVehicle() {
+   		return new Car();
+   	}
+   }
+   ```
+7. Create anpther Java class named VehicleController and update the codes as below.
+   ```java
+   import org.springframework.beans.factory.annotation.Autowired;
+   import org.springframework.beans.factory.annotation.Qualifier;
+   import org.springframework.web.bind.annotation.GetMapping;
+   import org.springframework.web.bind.annotation.RequestMapping;
+   import org.springframework.web.bind.annotation.RestController;
 
+   @RestController
+   @RequestMapping("/vehicle")
+   public class VehicleController {
+   	@Autowired
+	@Qualifier("car")
+   	MotorVehicleFactory mvfactory;
 
+   	@GetMapping
+   	public void getVehicle() {
+   		MotorVehicle mv = mvfactory.create();
+   		mv.build();
+   	}
+   }
+   ```
 
-
-// Concrete class: Car
-public class Car implements MotorVehicle {
-    @Override
-    public void build() {
-        System.out.println("Build Car");
-    }
-}
-
-// MotorVehicleFactory (abstract class)
-public abstract class MotorVehicleFactory {
-    public MotorVehicle create() {
-        MotorVehicle vehicle = createMotorVehicle();
-        vehicle.build();
-        return vehicle;
-    }
-
-    protected abstract MotorVehicle createMotorVehicle();
-}
-
-// Specific factory: MotorcycleFactory
-public class MotorcycleFactory extends MotorVehicleFactory {
-    @Override
-    protected MotorVehicle createMotorVehicle() {
-        return new Motorcycle();
-    }
-}
-
-// Specific factory: CarFactory
-public class CarFactory extends MotorVehicleFactory {
-    @Override
-    protected MotorVehicle createMotorVehicle() {
-        return new Car();
-    }
-}
-```
 
 In this example, the MotorcycleFactory and CarFactory extend the MotorVehicleFactory base class to create specific types of motor vehicles. New vehicle types can be easily added without affecting existing code.
 
