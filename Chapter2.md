@@ -305,7 +305,7 @@ In this case, the Pojo instance will be injected with the bean defined in beans.
 @Bean is a method-level annotation and a direct analog of the XML <bean/> element. The annotation supports some of the attributes offered by <bean/>, such as:
 
 - init-method
-- destroy-methohd
+- destroy-method
 - autowiring
 - name
 
@@ -372,6 +372,120 @@ public class AppConfig {
 
 However, this limits the visibility for advance type prediction to the specified interface type (TransferService). Then, with the full type (TransferServiceImpl) known to the container only once the affected singleton bean has been instantiated. Non-lazy singleton beans get instantiated according to their declaration order, so you may see different type matching results depending on when another component tries to match by a non-declared type (such as @Autowired TransferServiceImpl, which resolves only once the transferService bean has been instantiated).
 
+**Example**
+
+In this example, we are going to create two JavaBean classes, configure the beans in the configuration class, then have it injected into component using @Autowired annotation.
+
+1. Create a Java class named Transmission.java
+   ```java
+   package com.example.di;
+
+   public class Transmission {
+   	private final String type;
+
+   	public Transmission(String type) {
+   		this.type = type;
+   		System.out.println("Transmission constructor");
+   	}
+
+   	@Override
+   	public String toString() {
+   		return String.format("%s", type);
+   	}
+   }
+   ```
+2. Create the second Java class named Engine.java
+   ```java
+   package com.example.di;
+
+   public class Engine {
+   	private final String type;
+   	private final int volume;
+
+   	public Engine(String type, int volume) {
+   		this.type = type;
+   		this.volume = volume;
+   		System.out.println("Engine constructor");
+   	}
+
+   	@Override
+   	public String toString() {
+   		return String.format("%s %d", type, volume);
+   	}
+   }
+   ```
+3. Next create another Java class named Config.java, this will be the configuration class where we are going to register the beans.
+   ```java
+   package com.example.di;
+
+   import org.springframework.context.annotation.Bean;
+   import org.springframework.context.annotation.ComponentScan;
+   import org.springframework.context.annotation.Configuration;
+
+   @Configuration
+   @ComponentScan("com.example.di")
+   public class Config {
+
+   	@Bean
+   	public Engine engine() {
+   		return new Engine("v8", 5);
+   	}
+
+   	@Bean
+   	public Transmission transmission() {
+   		return new Transmission("sliding");
+   	}
+   }
+   ```
+4. Now it's time to create the component class, create a Java class named Car.java
+   ```java
+   package com.example.di;
+
+   import org.springframework.beans.factory.annotation.Autowired;
+   import org.springframework.stereotype.Component;
+
+   @Component
+   public class Car {
+   	private final Engine engine;
+   	private final Transmission transmission;
+
+   	@Autowired
+   	public Car(Engine engine, Transmission transmission) {
+   		this.engine = engine;
+   		this.transmission = transmission;
+   	}
+
+   	@Override
+   	public String toString() {
+   		return String.format("Engine: %s Transmission: %s", engine, transmission);
+   	}
+   }
+   ```
+5. Finally, the application class named AppRunner.java
+   ```java
+   package com.example.di;
+   import org.springframework.boot.autoconfigure.SpringBootApplication;
+   import org.springframework.context.ApplicationContext;
+   import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+   @SpringBootApplication
+   public class AppRunner {
+
+   	public static void main(String[] args) {
+   		// get the application context object and load the configuration class
+   		ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
+
+		// get the bean object
+   		Car car = context.getBean(Car.class);
+   		System.out.println(car);
+   	}
+   }
+   ```
+6. Run the AppRunner.java class by right-click > Run As > Java Application. Verify the output looks like below.
+   > Engine constructor<br/>
+   > Transmission constructor<br/>
+   > Engine: v8 5 Transmission: sliding<br/>
+   
 ## Singletons and Prototypes
 
 Bean Scopes refers to the lifecycle of Bean that means when the object of Bean will be instantiated, how long does that object live, and how many objects will be created for that bean throughout. Basically, it controls the instance creation of the bean and it is managed by the spring container.
