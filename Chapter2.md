@@ -231,7 +231,7 @@ Let’s look at some code snippets:
    ```
 8. Run the application by right-click file FirstdemoApplication.java > Run As > Java Application
 9. Test it by typing the address (http://localhost:8080/vehicle) in your browser.
-10. Verify in the server log the message will be displayed.
+10. Verify in the server log the message "Build car" will be displayed.
 
 In this example, the MotorcycleFactory and CarFactory extend the MotorVehicleFactory base class to create specific types of motor vehicles. New vehicle types can be easily added without affecting existing code.
 
