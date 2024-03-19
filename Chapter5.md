@@ -348,15 +348,38 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan("com.example.generics")
 public class GenericsConfig {
 	
-	@Autowired
-	private List<Car> vehicles;
-	
 	@Bean
 	public Car getMercedes() {
 		return new Car("E280", "Mercedes", "Diesel");
 	}
 }
 ```
+
+To test, create the application class and obtain the bean instance.
+
+```java
+package com.example.generics;
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+@SpringBootApplication
+public class GenericsApp {
+
+	public static void main(String[] args) {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(GenericsConfig.class);
+
+		Car car = context.getBean(Car.class);
+		System.out.println(car);
+
+		context.close();
+	}
+
+}
+```
+> Name: E280<br/>
+> Manufacturer: Mercedes<br/>
+> Engine Type: Diesel
 
 Next, create the component class where the generic list will be injected.
 
@@ -382,7 +405,7 @@ public class Transport {
 }
 ```
 
-Finally, the application class.
+Finally, update the application class.
 
 ```java
 package com.example.generics;
@@ -393,6 +416,9 @@ public class GenericsApp {
 
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(GenericsConfig.class);
+
+		Car car = context.getBean(Car.class);
+		System.out.println(car);
 
 		Transport t = context.getBean(Transport.class);
 		t.printList();
@@ -405,6 +431,9 @@ public class GenericsApp {
 
 Run the application and verify the output.
 
+> Name: E280<br/>
+> Manufacturer: Mercedes<br/>
+> Engine Type: Diesel<br/>
 > Name: E280<br/>
 > Manufacturer: Mercedes<br/>
 > Engine Type: Diesel
@@ -448,6 +477,9 @@ private List<Motorcycle> vehicles;
 
 Run the application and verify the output now contain details of the Motorcycle object instead.
 
+> Name: E280<br/>
+> Manufacturer: Mercedes<br/>
+> Engine Type: Diesel<br/>
 > Name: Z900<br/>
 > Manufacturer: Kawasaki<br/>
 > Two Wheeler Type: true
