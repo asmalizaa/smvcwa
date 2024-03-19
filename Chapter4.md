@@ -921,7 +921,7 @@ Register the bean in SpringBootXmlApplication.java by adding this codes.
 public FieldValueTestBean getFieldValueTestBean() {
 	return new FieldValueTestBean();
 }
----
+```
 
 Add this codes to application class to test it.
 
