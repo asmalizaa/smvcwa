@@ -189,8 +189,10 @@ In Cookies, some components are available those are:
 
 In Spring MVC, @CookieValue, this annotation provides a convenient way for working with cookies in controller method. And @CookieValue provides a easy way for extracting cookie values and integrate them into out application. @CookieValue is used in spring MVC for binding method parameters value of a HTTP cookie.
 
+**Note: To continue with next examples, create a new project using Spring Initializr and make sure to include dependencies: Spring Web and Thymeleaf**
+
 ```java
-package com.example.webdemo;
+package com.example.cookiesdemo;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -210,4 +212,161 @@ public class CookieController {
 	}
 }
 ```
+
+### Example of @CookieValue Annotation
+
+Reference: (https://www.geeksforgeeks.org/working-with-cookies-in-spring-mvc-using-cookievalue-annotation/)
+
+Now we will see the working functionality of @CookieValue in Spring MVC with simple user signup form.
+
+Steps
+1. Create new project (if only)
+2. Create a user model
+3. Create the controller
+4. Create the view (HTML page)
+5. Run and test
+
+**User.java**
+
+```java
+package com.example.cookiesdemo;
+
+public class User {
+
+	private String username;
+	private String email;
+
+	public User() {
+
+	}
+
+	public User(String username, String email) {
+		this.username = username;
+		this.email = email;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+}
+```
+
+**UserController.java***
+
+```java
+package com.example.cookiesdemo;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+
+@Controller
+@RequestMapping("/user")
+public class UserController {
+
+	@GetMapping("/register")
+	public String showRegistrationForm(Model model) {
+		model.addAttribute("user", new User());
+		return "index";
+	}
+
+	@PostMapping("/register")
+	public String registerUser(User user, HttpServletResponse response) {
+		// For simplicity, we'll just set a cookie with the username
+		Cookie cookie = new Cookie("usernameCookie", user.getUsername());
+		response.addCookie(cookie);
+		return "redirect:/user/welcome";
+	}
+
+	@GetMapping("/welcome")
+	@ResponseBody
+	public String welcomeUser(@CookieValue(value = "usernameCookie", defaultValue = "Guest") String username) {
+		return "Welcome, " + username + "!";
+	}
+}
+```
+
+In above code, we have used different annotations for different purposes. @Controller Annotation is used for creating a controller layer. And It indicates that particular class serve as a role of controller. After that we have used @RequestMapping Annotation for to map web requests for a specific handler class, And the @RequestMapping annotation is used with @Controller. @RequestMapping It is applied for both class and it’s methods. After that we have used @GetMapping for mapping HTTP Get Requests for a Specific handler class.
+
+- @GetMapping(“/register”) this is used for display the HTML Page on the web browser using Model.
+- @PostMapping(“/register”) It is used for submitting the data through the HTML Form.
+- @GetMapping(“/welcome”) is used for Displaying the Cookie Value on the web browser.
+
+**index.html**
+
+```html
+<!DOCTYPE html> 
+<html lang="en" xmlns:th="http://www.thymeleaf.org"> 
+<head> 
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<title>User Registration</title> 
+
+	<!-- Include Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		crossorigin="anonymous"> 
+</head> 
+<body> 
+
+<div class="container mt-5"> 
+	<form th:action="@{/user/register}" th:object="${user}" method="post" class="col-md-6 offset-md-3"> 
+		<h2 class="mb-4">User Registration</h2> 
+
+		<div class="form-group"> 
+			<label for="username">Username:</label> 
+			<input type="text" id="username" th:field="*{username}" class="form-control" required> 
+		</div> 
+
+		<div class="form-group"> 
+			<label for="email">Email:</label> 
+			<input type="email" id="email" th:field="*{email}" class="form-control" required> 
+		</div> 
+
+		<button type="submit" class="btn btn-success">Register</button> 
+	</form> 
+</div> 
+
+<!-- Include Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script> 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script> 
+
+</body> 
+</html> 
+```
+
+Run the application, in the browser type (http://localhost:8080/user/register)
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/d933dd71-b43a-4931-bf8c-e422c2f42e13)
+
+After submitting the form.
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/e89d5e19-2dfe-41d1-8e85-363b21484c8b)
+
 
