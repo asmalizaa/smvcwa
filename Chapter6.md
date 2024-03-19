@@ -50,6 +50,10 @@ Step 5: The .class file is executed by the Servlet engine which is a part of the
 
 Step 6: The web server forwards the HTML file to the client’s browser.
 
+**Example**
+
+Reference: (https://www.baeldung.com/spring-boot-jsp)
+
 ## The MVC Pattern
 
 The Model-View-Controller (MVC) design pattern is a software design pattern that divides the related program logic into three interconnected elements: the model, the view, and the controller.
