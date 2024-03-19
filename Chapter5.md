@@ -9,7 +9,7 @@ In this topic, we’re going to show how to inject Java collections using the Sp
 Let’s create an example bean:
 
 ```java
-package com.example.collections;
+package com.example.collectionsdemo;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class CollectionsBean {
 After that, we register the CollectionsBean in the configuration setup class:
 
 ```java
-package com.example.collections;
+package com.example.collectionsdemo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +38,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan("com.example.collections")
+@ComponentScan("com.example.collectionsdemo")
 public class CollectionConfig {
 
 	@Bean
@@ -56,13 +56,13 @@ public class CollectionConfig {
 Create the application class called CollectionsApp.java with codes below.
 
 ```java
-package com.example.collections;
+package com.example.collectionsdemo;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 @SpringBootApplication
-public class CollectionsApp {
+public class CollectionsdemoApplication {
 
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CollectionsConfig.class);
@@ -144,3 +144,69 @@ public Map<Integer, String> nameMap() {
 
 Call printNameMap() method in the application class. Run the application and verify the outout.
 > {1=John, 2=Adam, 3=Harry, 4=Rocky}
+
+## Injecting Bean References
+
+Let’s look at an example where we inject bean references as elements of the collection.
+
+First, let’s create the bean:
+
+```
+package com.example.collectionsdemo;
+
+public class MyBean {
+	private String name;
+	
+	public MyBean(String name) {
+		setName(name);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+}
+```
+
+And add a List of MyBean as a property to the CollectionsBean class:
+
+```java
+@Autowired(required = false)
+	private List<MyBean> beanList;
+
+	public void printBeanList() {
+		System.out.println(beanList);
+	}
+```
+
+Next, we add the Java configuration factory methods for each MyBean element:
+
+```java
+	@Bean
+	public MyBean getElement() {
+		return new MyBean("Sarah");
+	}
+
+	@Bean
+	public MyBean getAnotherElement() {
+		return new MyBean("Rose");
+	}
+
+	@Bean
+	public MyBean getOneMoreElement() {
+		return new MyBean("Lily");
+	}
+```
+
+The Spring container injects the individual beans of the MyBean type into one collection.
+
+To test this, we invoke the collectionsBean.printBeanList() method. The output shows the bean names as list elements:
+> [Sarah, Rose, Lily]
