@@ -524,6 +524,8 @@ The singleton scope is the default scope in Spring Boot.
 - The same instance is returned every time it is needed.
 - This approach is memory efficient as it reuses the bean across the application.
 
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/620f034d-4af6-486f-afb7-5e5b738efd5e)
+
 **When to Use Singleton Scope?**
 
 - **Shared Resources**: Use singleton for beans that act as shared resources, such as a database connection pool or a configuration manager.
@@ -638,6 +640,8 @@ Check the Console tab, verify the output looks like below.
 If the scope is declared prototype, then spring IOC container will create a new instance of that bean every time a request is made for that specific bean. 
 - A request can be made to the bean instance either programmatically using getBean() method or by XML for Dependency Injection of secondary type.
 - Generally, we use the prototype scope for all beans that are stateful, while the singleton scope is used for the stateless beans.
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/7ff2258f-e843-4fd7-aae3-b46bae72c1fc)
 
 **Prototype Scope Example**
 
