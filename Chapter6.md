@@ -429,3 +429,6 @@ Overall, the Strategy pattern is a useful design pattern that allows the behavio
    - It knows the requirements of the task and decides which strategy to use based on those requirements.
    - The client creates an instance of the desired concrete strategy and passes it to the Context, enabling the Context to use the selected strategy to perform the task.
 
+### Real-World Analogy of Strategy Design Pattern
+
+> Imagine you’re planning a trip to a new city, and you have several options for getting there: by car, by train, or by plane. Each mode of transportation offers its own set of advantages and disadvantages, depending on factors such as cost, travel time, and convenience.
