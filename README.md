@@ -4,7 +4,7 @@
 2. [The Container](https://github.com/asmalizaa/smvcwa/blob/main/Chapter2.md)
 3. [Instantiation and Configuration](https://github.com/asmalizaa/smvcwa/blob/main/Chapter3.md)
 4. [Dependency Injection](https://github.com/asmalizaa/smvcwa/blob/main/Chapter4.md)
-5. Assembling Object Models
+5. [Assembling Object Models](https://github.com/asmalizaa/smvcwa/blob/main/Chapter5.md)
 6. The Web Module
 7. Handling Requests
 8. Working with Forms
