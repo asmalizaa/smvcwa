@@ -429,6 +429,104 @@ Overall, the Strategy pattern is a useful design pattern that allows the behavio
    - It knows the requirements of the task and decides which strategy to use based on those requirements.
    - The client creates an instance of the desired concrete strategy and passes it to the Context, enabling the Context to use the selected strategy to perform the task.
 
-### Real-World Analogy of Strategy Design Pattern
+### Strategy Design Pattern Example
 
-> Imagine you’re planning a trip to a new city, and you have several options for getting there: by car, by train, or by plane. Each mode of transportation offers its own set of advantages and disadvantages, depending on factors such as cost, travel time, and convenience.
+> Let’s consider a sorting application where we need to sort a list of integers. However, the sorting algorithm to be used may vary depending on factors such as the size of the list and the desired performance characteristics.
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/11a1d96f-13c8-4370-adcb-667414a54b27)
+
+1. Context (SortingContext)
+
+   ```java
+   package com.example.webdemo.strategy;
+
+   public class SortingContext {
+   	private SortingStrategy sortingStrategy;
+
+   	public SortingContext(SortingStrategy sortingStrategy) {
+   		this.sortingStrategy = sortingStrategy;
+   	}
+
+   	public void setSortingStrategy(SortingStrategy sortingStrategy) {
+   		this.sortingStrategy = sortingStrategy;
+   	}
+
+   	public void performSort(int[] array) {
+   		sortingStrategy.sort(array);
+   	}
+   }
+   ```
+
+2. Strategy Interface (SortingStrategy)
+
+   ```java
+   package com.example.webdemo.strategy;
+
+   public interface SortingStrategy {
+   	void sort(int[] array);
+   }
+   ```
+
+3. Concrete Strategies: BubbleSortStrategy, MergeSortStrategy, QuickSortStrategy 
+
+   ```java
+   package com.example.webdemo.strategy;
+
+   public class BubbleSortStrategy implements SortingStrategy {
+
+   	@Override
+   	public void sort(int[] array) {
+   		// Implement Bubble Sort algorithm
+   		System.out.println("Sorting using Bubble Sort");
+   	}
+   }
+   ```
+   ```java
+   package com.example.webdemo.strategy;
+
+   public class MergeSortStrategy implements SortingStrategy {
+   	@Override
+   	public void sort(int[] array) {
+   		// Implement Merge Sort algorithm
+   		System.out.println("Sorting using Merge Sort");
+   	}
+   }
+   ```
+   ```java
+   package com.example.webdemo.strategy;
+
+   public class QuickSortStrategy implements SortingStrategy {
+   	@Override
+   	public void sort(int[] array) {
+   		// Implement Quick Sort algorithm
+   		System.out.println("Sorting using Quick Sort");
+   	}
+   }
+   ```
+
+4. Client Component
+
+   ```java
+   package com.example.webdemo.strategy;
+
+   public class Client {
+   	public static void main(String[] args) {
+   		// Create SortingContext with BubbleSortStrategy
+   		SortingContext sortingContext = new SortingContext(new BubbleSortStrategy());
+   		int[] array1 = { 5, 2, 9, 1, 5 };
+   		sortingContext.performSort(array1); // Output: Sorting using Bubble Sort
+
+   		// Change strategy to MergeSortStrategy
+   		sortingContext.setSortingStrategy(new MergeSortStrategy());
+   		int[] array2 = { 8, 3, 7, 4, 2 };
+   		sortingContext.performSort(array2); // Output: Sorting using Merge Sort
+
+   		// Change strategy to QuickSortStrategy
+   		sortingContext.setSortingStrategy(new QuickSortStrategy());
+   		int[] array3 = { 6, 1, 3, 9, 5 };
+   		sortingContext.performSort(array3); // Output: Sorting using Quick Sort
+   	}
+   }
+   ```
+
+5. Run the program and review the output.
