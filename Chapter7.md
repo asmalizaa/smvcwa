@@ -138,3 +138,76 @@ http://localhost:8080/api/employees/111
 ---- 
 ID: 111
 ```
+
+## HTTP Headers
+
+Let's look at how to access HTTP Headers in a Spring Rest Controller. 
+- First, we’ll be using the @RequestHeader annotation to read headers individually as well as all together.
+- After that, we’ll take a deeper look at the @RequestHeader attributes.
+
+If we need access to a specific header, we can configure @RequestHeader with the header name:
+
+```java
+@GetMapping("/greeting")
+public ResponseEntity<String> greeting(@RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) String language) {
+    // code that uses the language variable
+    return new ResponseEntity<String>("Hello there!", HttpStatus.OK);
+}
+```
+
+Then we can access the value using the variable passed into our method. If a header named accept-language isn’t found in the request, the method returns a "400 Bad Request" error.
+
+Our headers don’t have to be strings. If we know our header is a number, we can declare our variable as a numeric type:
+
+```java
+@GetMapping("/double")
+public ResponseEntity<String> doubleNumber(@RequestHeader("my-number") int myNumber) {
+    return new ResponseEntity<String>(String.format("%d * 2 = %d", 
+      myNumber, (myNumber * 2)), HttpStatus.OK);
+}
+```
+
+To test, add these codes to any controller you've created before eg. HelloController, run and test it using Postman.
+
+## Cookies
+
+Cookies are the concept of storing user information on the client side in the form of a text file. In this text file lot of information is available about clients or users. 
+
+Cookies are small pieces of data that are sent by the web servers to the user’s web browsers and those cookies are stored in the client only, the cookies play an important role in web development for tracking the user’s activities while using the website. Mostly the cookies are used in Authentication Tokens, Privacy, Session Handling, Tracking, and Analytics of user activity. 
+
+Cookies are again categorized into two types of Server-Side Cookies and Client-Side Cookies. Here, we discuss about @CookieValue Annotation in Spring MVC.
+
+In Cookies, some components are available those are:
+-  Name-Value Pair: The Cookies consist of a name and value pair, which means the name is the identifier and the value is the data associated with that identifier.
+-  Domain: It specifies the domain to which, the cookie belongs, and cookies are sent to a domain for every request.
+-  Path: It defines the Scope of the Cookie.
+-  Expiration Date: It defines When the cookies are expired. After this cookie expiration automatically, the cookie is deleted by the Browser.
+-  Secure Flag: If we set this to cookie. Then Cookies are sent only over HTTPS Connections.
+-  HttpOnly Flag: If we set this to Cookie, then those cookies are not accessible from Client-Side Scripts.
+
+### @CookieValue Annotation
+
+In Spring MVC, @CookieValue, this annotation provides a convenient way for working with cookies in controller method. And @CookieValue provides a easy way for extracting cookie values and integrate them into out application. @CookieValue is used in spring MVC for binding method parameters value of a HTTP cookie.
+
+```java
+package com.example.webdemo;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+@RequestMapping("/cookies")
+public class CookieController {
+
+	@RequestMapping("/readCookie")
+	@ResponseBody
+	public String readCookieValue(
+			@CookieValue(value = "cookieName", defaultValue = "defaultCookieValue") String cookieValue) {
+		// Your logic here using the cookie value
+		return "Cookie Value: " + cookieValue;
+	}
+}
+```
+
