@@ -6,7 +6,7 @@
 4. [Dependency Injection](https://github.com/asmalizaa/smvcwa/blob/main/Chapter4.md)
 5. [Assembling Object Models](https://github.com/asmalizaa/smvcwa/blob/main/Chapter5.md)
 6. [The Web Module](https://github.com/asmalizaa/smvcwa/blob/main/Chapter6.md)
-7. Handling Requests
+7. [Handling Requests](https://github.com/asmalizaa/smvcwa/blob/main/Chapter7.md)
 8. Working with Forms
 9. Data Binding
 10. Validation
