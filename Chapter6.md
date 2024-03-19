@@ -58,7 +58,27 @@ JSP Processing is illustrated and discussed in sequential steps prior to which a
 5. The .class file is executed by the Servlet engine which is a part of the Web Server. The output is an HTML file. The Servlet engine passes the output as an HTTP response to the webserver.
 6. The web server forwards the HTML file to the client’s browser.
 
-**Example**
+## The MVC Pattern
+
+The Model-View-Controller (MVC) design pattern is a software design pattern that divides the related program logic into three interconnected elements: the model, the view, and the controller.
+
+The MVC pattern is used for developing user interfaces, especially web applications, because it allows the application to be scalable, maintainable, and easy to expand.
+
+Here is a diagram that shows the interactions within one possible take on the MVC pattern:
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/9ab5ea19-b8d1-4d97-861e-369f33e962cd)
+
+The diagram illustrates the following roles and responsibilities of each element:
+
+1. **Model**: The model represents the data and the business logic of the application. It is responsible for managing the data, performing calculations, and providing data to the view. The model does not depend on the view or the controller, and can be tested independently.
+
+2. **View**: The view is the user interface of the application. It displays the data from the model to the user and receives user input. The view does not contain any logic or know how to manipulate the data. It only communicates with the controller, which acts as an intermediary between the view and the model.
+
+3. **Controller**: The controller is the coordinator of the application. It handles user input from the view, updates the model accordingly, and sends data back to the view. The controller acts as a bridge between the model and the view, and controls the flow of information and logic.
+
+The MVC pattern helps to achieve separation of concerns, which means that each element has a distinct and well-defined role and responsibility. This makes the code more modular, reusable, and easy to maintain. It also allows multiple developers to work on different parts of the application simultaneously without interfering with each other.
+
+### Example
 
 Note: This example was taken loosely from this tutorial (https://www.javaguides.net/2020/05/spring-boot-jsp-example-tutorial.html)
 
@@ -169,36 +189,25 @@ In this example, we are going to create a simple Spring MVC application that wil
    
 6. Let's run this spring boot application from IDE -> Right click -> Run As -> Java Application and to test it, launch your browser and type this address (http://localhost:8080/hello)
 
+### Understanding ViewResolver in Spring MVC
 
-   
+In the context of Spring MVC, the ViewResolver interface assists in mapping logical view names, returned by the Controller, to actual view objects, such as JSPs or Thymeleaf templates. It forms a bridge between the controller and the view component of the MVC architecture, determining which view to display based on the logical view name.
 
-## The MVC Pattern
+### The Role of ViewResolver in the Spring MVC Flow
 
-The Model-View-Controller (MVC) design pattern is a software design pattern that divides the related program logic into three interconnected elements: the model, the view, and the controller.
+When a request is processed by a Spring MVC application, the request is received by the DispatcherServlet, which then routes it to the appropriate controller. The controller performs the required business logic and returns a ModelAndView object, containing the model data and the logical name of the view
 
-The MVC pattern is used for developing user interfaces, especially web applications, because it allows the application to be scalable, maintainable, and easy to expand.
-
-Here is a diagram that shows the interactions within one possible take on the MVC pattern:
-
-![image](https://github.com/asmalizaa/smvcwa/assets/23090837/9ab5ea19-b8d1-4d97-861e-369f33e962cd)
-
-The diagram illustrates the following roles and responsibilities of each element:
-
-1. **Model**: The model represents the data and the business logic of the application. It is responsible for managing the data, performing calculations, and providing data to the view. The model does not depend on the view or the controller, and can be tested independently.
-
-2. **View**: The view is the user interface of the application. It displays the data from the model to the user and receives user input. The view does not contain any logic or know how to manipulate the data. It only communicates with the controller, which acts as an intermediary between the view and the model.
-
-3. **Controller**: The controller is the coordinator of the application. It handles user input from the view, updates the model accordingly, and sends data back to the view. The controller acts as a bridge between the model and the view, and controls the flow of information and logic.
-
-The MVC pattern helps to achieve separation of concerns, which means that each element has a distinct and well-defined role and responsibility. This makes the code more modular, reusable, and easy to maintain. It also allows multiple developers to work on different parts of the application simultaneously without interfering with each other.
+This logical view name is passed onto the ViewResolver, which then resolves it to a specific view technology, such as JSP, Thymeleaf, or FreeMarker. The DispatcherServlet will render this view, along with the model data, back to the client.
 
 ## The Front Controller Pattern
 
 Reference: (https://www.baeldung.com/java-front-controller-pattern)
 
-Front Controller is defined as “a controller that handles all requests for a Web site”. It stands in front of a web-application and delegates requests to subsequent resources. It also provides an interface to common behavior such as security, internationalization and presenting particular views to certain users.
+Front Controller is defined as "a controller that handles all requests for a Web site". It stands in front of a web-application and delegates requests to subsequent resources. It also provides an interface to common behavior such as security, internationalization and presenting particular views to certain users.
 
 This enables an application to change its behavior at runtime. Furthermore it helps to read and maintain an application by preventing code duplication.
+
+The Front Controller consolidates all request handling by channeling requests through a single handler object.
 
 ### How Does it Work?
 
@@ -207,8 +216,6 @@ The Front Controller Pattern is mainly divided into two parts. A single dispatch
 ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/6c4a0202-fc87-4977-89fc-51dfa7d49af7)
 
 This single controller dispatches requests to commands in order to trigger behavior associated with a request.
-
-**Example**
 
 ## DispatcherServlet
 
