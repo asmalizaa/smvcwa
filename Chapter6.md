@@ -60,7 +60,7 @@ JSP Processing is illustrated and discussed in sequential steps prior to which a
 
 **Example**
 
-Reference: (https://www.baeldung.com/spring-boot-jsp)
+
 
 ## The MVC Pattern
 
