@@ -719,7 +719,7 @@ class Inventor {
 	public Inventor(String name, Date birthdate, String nationality) {
 		this.name = name;
 		this.birthdate = birthdate;
-		this.birthdate = birthdate;
+		this.nationality = nationality;
 	}
 
 	public String getName() {
