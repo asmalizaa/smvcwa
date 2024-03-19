@@ -1,5 +1,18 @@
 # The Web Module
 
+A web application, also known as a web app, is a software application that runs on one or more web servers. It is typically accessed through a web browser over a network, such as the Internet. The advantage over desktop and mobile applications is being platform-independent, as it can be accessed and used on different devices.
+
+In the Jakarta EE platform, web applications are represented by web components as seen in Jakarta Web Application Request Handling. A web component can be represented by JSP, Jakarta Servlet, Jakarta Faces or Jakarta REST.
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/fbea93e0-9151-4350-9838-0cb8764c89bf)
+
+1. The client sends an HTTP request to the web server.
+2. The web server module that supports Jakarta Servlet-based web components is called a servlet container.
+3. The servlet container converts the HTTP request into an HttpServletRequest object and prepares the HttpServletResponse object.
+4. These objects are delivered to a web component, which can interact with beans or a database to generate dynamic content.
+5. The web component can fill the HttpServletResponse object with the generated dynamic content or can pass the object to another web component to fill it.
+6. The servlet container ultimately converts the HttpServletResponse object to an HTTP response and the web server returns it to the client.
+
 ## Why we need Servlet and JSPs?
 
 Web servers are good for static contents HTML pages, but they don’t know how to generate dynamic content or how to save data into databases, so we need another tool that we can use to generate dynamic content. 
