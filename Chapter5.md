@@ -85,11 +85,11 @@ To set up the same example with the Set collection, let’s modify the Collectio
 private Set<String> nameSet;
 
 public CollectionsBean(Set<String> strings) {
-  this.nameSet = strings;
+	this.nameSet = strings;
 }
 
 public void printNameSet() {
-  System.out.println(nameSet);
+	System.out.println(nameSet);
 }
 ```
 
@@ -98,7 +98,7 @@ This time we want to use a constructor injection for initializing the nameSet pr
 ```java
 @Bean
 public CollectionsBean getCollectionsBean() {
-  return new CollectionsBean(new HashSet<>(Arrays.asList("John", "Adam", "Harry", "David")));
+	return new CollectionsBean(new HashSet<>(Arrays.asList("John", "Adam", "Harry", "David")));
 }
 ```
 
@@ -120,11 +120,11 @@ private Map<Integer, String> nameMap;
 
 @Autowired
 public void setNameMap(Map<Integer, String> nameMap) {
-  this.nameMap = nameMap;
+	this.nameMap = nameMap;
 }
 
 public void printNameMap() {
-  System.out.println(nameMap);
+	System.out.println(nameMap);
 }
 ```
 
@@ -133,12 +133,12 @@ This time we have a setter method in order to use a setter dependency injection.
 ```java
 @Bean
 public Map<Integer, String> nameMap() {
-  Map<Integer, String> nameMap = new HashMap<>();
-  nameMap.put(1, "John");
-  nameMap.put(2, "Adam");
-  nameMap.put(3, "Harry");
-  nameMap.put(4, "Rocky");
-  return nameMap;
+	Map<Integer, String> nameMap = new HashMap<>();
+	nameMap.put(1, "John");
+	nameMap.put(2, "Adam");
+	nameMap.put(3, "Harry");
+	nameMap.put(4, "Rocky");
+	return nameMap;
 }
 ```
 
@@ -151,7 +151,7 @@ Let’s look at an example where we inject bean references as elements of the co
 
 First, let’s create the bean:
 
-```
+```java
 package com.example.collectionsdemo;
 
 public class MyBean {
@@ -180,33 +180,85 @@ And add a List of MyBean as a property to the CollectionsBean class:
 
 ```java
 @Autowired(required = false)
-	private List<MyBean> beanList;
+private List<MyBean> beanList;
 
-	public void printBeanList() {
-		System.out.println(beanList);
-	}
+public void printBeanList() {
+	System.out.println(beanList);
+}
 ```
 
 Next, we add the Java configuration factory methods for each MyBean element:
 
 ```java
-	@Bean
-	public MyBean getElement() {
-		return new MyBean("Sarah");
-	}
+@Bean
+public MyBean getElement() {
+	return new MyBean("Sarah");
+}
 
-	@Bean
-	public MyBean getAnotherElement() {
-		return new MyBean("Rose");
-	}
+@Bean
+public MyBean getAnotherElement() {
+	return new MyBean("Rose");
+}
 
-	@Bean
-	public MyBean getOneMoreElement() {
-		return new MyBean("Lily");
-	}
+@Bean
+public MyBean getOneMoreElement() {
+	return new MyBean("Lily");
+}
 ```
 
 The Spring container injects the individual beans of the MyBean type into one collection.
 
 To test this, we invoke the collectionsBean.printBeanList() method. The output shows the bean names as list elements:
 > [Sarah, Rose, Lily]
+
+## Using @Order to Sort Beans
+
+We can specify the order of the beans while injecting into the collection.
+
+For that purpose, we use the @Order annotation and specify the index:
+
+```java
+@Bean
+@Order(2)
+public MyBean getElement() {
+	return new MyBean("Sarah");
+}
+
+@Bean
+@Order(3)
+public MyBean getAnotherElement() {
+	return new MyBean("Rose");
+}
+
+@Bean
+@Order(1)
+public MyBean getOneMoreElement() {
+	return new MyBean("Lily");
+}
+```
+
+Spring container first will inject the bean with the name "Lily", as it has the lowest order value.
+
+It will then inject the "Sarah", and finally, the "Rose" bean:
+> [Lily, Sarah, Rose]
+
+## Setting an Empty List as a Default Value
+
+We can set the default value for an injected List property as an empty list by using the Collections.emptyList() static method:
+
+```java
+@Value("${names.list:}#{T(java.util.Collections).emptyList()}")
+private List<String> nameListWithDefaultValue;
+
+public void printNameListWithDefaults() {
+	System.out.println(nameListWithDefaultValue);
+}
+```
+
+If we run this with the "names.list" key not initialized via properties file:
+
+```java
+collectionsBean.printNameListWithDefaults();
+```
+We’ll get an empty list as output:
+> []
