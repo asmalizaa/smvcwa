@@ -286,3 +286,22 @@ In this activity, we are going to create a form to add a new tutorial.
 
    Make sure to check the database table to ensure the new record was successfully added.
    
+## A Request/Response Cycle
+
+Reference: (https://tutorialspedia.com/how-java-spring-mvc-works-spring-mvc-request-flow-explained-step-by-step/#google_vignette)
+
+Spring MVC request flow is depicted in the diagram below:
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/c5f81286-19e3-463d-a777-f8132b327a50)
+
+1. Client requests for a page by specifying the Web URL for the page. E.g. https://www.iverson.com.my
+2. Client request is intercepted by the Dispatcher Servlet also known as Front Controller. Dispatcher Servlet is a servlet specified in Web.XML file (for XML Based configurations) or in the Web Configuration class (for java based configurations).
+3. Dispatcher Servlet uses URL Mapping Handler to find out the relevant controller class to which request should be passed for subsequent processing. For example, If you have a Controller defined for all requests by specifying “/” in the URL, all requests will be entertained by that controller.
+4. Once Dispatcher Servlet has identified the Controller to be considered, it passes the client request to the controller.
+5. The controller class is the main class controlling the business logic flow once request has been dispatched it it by dispatcher servlet. This class will implement the methods for different type of http requests (e.g. GET, POST) and all logic to call Service layer methods will reside in this controller class.
+6. The controller class will also be responsible for returning the ModelAndView object back to the dispatcher servlet after getting all business logic executed and any data returned from DAO layer. ModelAndView object returned by the controller back to the controller specified both view and model objects.
+7. Controller class is annotated by @Controller annotation.
+8. After receiving ModelAndView object from the controller, Dispatcher Servlet now sends model object to view resolver to get the name of the view which needs to be rendered.
+9. Once the view to be rendered has been identified, Dispatcher Servlet passes model object to the view. Model object contains the data which needs to be displayed in the view. View will be rendered with the model data. Views can be designed in any front-end technology.
+10. This view is returned to the client and client can see the view and associated data on his browser.
+
