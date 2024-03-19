@@ -262,3 +262,125 @@ collectionsBean.printNameListWithDefaults();
 ```
 We’ll get an empty list as output:
 > []
+
+## Autowiring Generics in Spring 
+
+Spring support generic types injection. Spring lets us use a generic type as a qualifier without the need for an explicit annotation since version 4.0.
+
+To explore it, first let's create an abstract class called Vehicle.java
+
+```java
+package com.example.generics;
+
+public abstract class Vehicle {
+	private String name;
+	private String manufacturer;
+
+	public Vehicle(String name, String manufacturer) {
+		this.name = name;
+		this.manufacturer = manufacturer;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getManufacturer() {
+		return manufacturer;
+	}
+
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+
+	@Override
+	public String toString() {
+		return "Name: " + getName() + "\nManufacturer: " + getManufacturer();
+	}
+}
+```
+
+Next, create the subclass called Car.java with below codes.
+
+```java
+package com.example.generics;
+
+public class Car extends Vehicle {
+	private String engineType;
+
+	public Car(String name, String manufacturer, String engineType) {
+		super(name, manufacturer);
+		this.engineType = engineType;
+	}
+
+	public String getEngineType() {
+		return engineType;
+	}
+
+	public void setEngineType(String engineType) {
+		this.engineType = engineType;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "\nEngine Type: " + getEngineType();
+	}
+}
+```
+
+Create the configuration class. In this class, we will inject a list of vehicles using generic type.
+
+```java
+package com.example.generics;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan("com.example.generics")
+public class GenericsConfig {
+	
+	@Autowired
+	private List<Car> vehicles;
+	
+	@Bean
+	public Car getMercedes() {
+		return new Car("E280", "Mercedes", "Diesel");
+	}
+}
+```
+
+Finally, the application class.
+
+```java
+package com.example.generics;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class GenericsApp {
+
+	public static void main(String[] args) {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(GenericsConfig.class);
+
+		Car car = context.getBean(Car.class);
+		System.out.println(car);
+
+		context.close();
+	}
+
+}
+```
+
+Run the application and verify the output.
+
+> Name: E280<br/>
+> Manufacturer: Mercedes<br/>
+> Engine Type: Diesel
