@@ -46,22 +46,17 @@ Now let us discuss JSP which stands for Java Server Pages.
 - It is a Web-based technology that helps us to create dynamic and platform-independent web pages.
 - In this, Java code can be inserted in HTML/ XML pages or both.
 - JSP is first converted into a servlet by JSP container before processing the client’s request.
-- 
+
 JSP Processing is illustrated and discussed in sequential steps prior to which a pictorial media is provided as a handful pick to understand the JSP processing better which is as follows:
 
 ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/19b1a2be-5df2-41d3-b559-91b7adf9f63a)
 
-Step 1: The client navigates to a file ending with the .jsp extension and the browser initiates an HTTP request to the webserver. For example, the user enters the login details and submits the button. The browser requests a status.jsp page from the webserver.
-
-Step 2: If the compiled version of JSP exists in the web server, it returns the file. Otherwise, the request is forwarded to the JSP Engine. This is done by recognizing the URL ending with .jsp extension.
-
-Step 3: The JSP Engine loads the JSP file and translates the JSP to Servlet (Java code). This is done by converting all the template text into println() statements and JSP elements to Java code. This process is called translation.
-
-Step 4: The JSP engine compiles the Servlet to an executable .class file. It is forwarded to the Servlet engine. This process is called compilation or request processing phase.
-
-Step 5: The .class file is executed by the Servlet engine which is a part of the Web Server. The output is an HTML file. The Servlet engine passes the output as an HTTP response to the webserver.
-
-Step 6: The web server forwards the HTML file to the client’s browser.
+1. The client navigates to a file ending with the .jsp extension and the browser initiates an HTTP request to the webserver. For example, the user enters the login details and submits the button. The browser requests a status.jsp page from the webserver.
+2. If the compiled version of JSP exists in the web server, it returns the file. Otherwise, the request is forwarded to the JSP Engine. This is done by recognizing the URL ending with .jsp extension.
+3. The JSP Engine loads the JSP file and translates the JSP to Servlet (Java code). This is done by converting all the template text into println() statements and JSP elements to Java code. This process is called translation.
+4. The JSP engine compiles the Servlet to an executable .class file. It is forwarded to the Servlet engine. This process is called compilation or request processing phase.
+5. The .class file is executed by the Servlet engine which is a part of the Web Server. The output is an HTML file. The Servlet engine passes the output as an HTTP response to the webserver.
+6. The web server forwards the HTML file to the client’s browser.
 
 **Example**
 
