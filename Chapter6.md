@@ -530,3 +530,7 @@ Overall, the Strategy pattern is a useful design pattern that allows the behavio
    ```
 
 5. Run the program and review the output.
+
+   > Sorting using Bubble Sort<br/>
+   > Sorting using Merge Sort<br/>
+   > Sorting using Quick Sort
