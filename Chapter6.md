@@ -369,7 +369,7 @@ Spring MVC request flow is depicted in the diagram below:
 
 ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/c5f81286-19e3-463d-a777-f8132b327a50)
 
-1. Client requests for a page by specifying the Web URL for the page. E.g. https://www.iverson.com.my
+1. Client requests for a page by specifying the Web URL for the page. E.g. (https://spring.io/)
 2. Client request is intercepted by the Dispatcher Servlet also known as Front Controller. Dispatcher Servlet is a servlet specified in Web.XML file (for XML Based configurations) or in the Web Configuration class (for java based configurations).
 3. Dispatcher Servlet uses URL Mapping Handler to find out the relevant controller class to which request should be passed for subsequent processing. For example, If you have a Controller defined for all requests by specifying “/” in the URL, all requests will be entertained by that controller.
 4. Once Dispatcher Servlet has identified the Controller to be considered, it passes the client request to the controller.
