@@ -232,184 +232,134 @@ Now, the question is What is Front Controller? It is quite simple, as the name s
 
 ![image](https://github.com/asmalizaa/javaspring/assets/23090837/c8cc88ad-6406-4ff8-9e5d-eb2cd11c5f54)
 
-## Activity: Spring Web MVC
+### Example
 
-In this activity, we are going to create a form to add a new tutorial.
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/51d9a781-df7d-44cb-94ad-e59494d9ec44)
 
-**Steps**
+- FrontController - The FrontController is the initial contact point for handling requests in the system. It delegates to an ApplicationController to perform action and view management.
+- ApplicationController - An ApplicationController is responsible for action and view management, including locating and routing to the specific actions that will service a request, and finding and dispatching to the appropriate view.
+- Command - A Command performs the action that handles the request.
+- View - A View represents the display returned to the client.
 
-1. Add dependencies to your existing project.
-
-   - Thymeleaf dependency to your project (if needed).
-
-     ```xml
-     <dependency>
-         <groupId>org.springframework.boot</groupId>
-         <artifactId>spring-boot-starter-thymeleaf</artifactId>
-     </dependency>
-     ```
-
-   - Spring Boot Devtools (if needed).
-     ```xml
-     <dependency>
-     	<groupId>org.springframework.boot</groupId>
-     	<artifactId>spring-boot-devtools</artifactId>
-     	<scope>runtime</scope>
-     	<optional>true</optional>
-     </dependency>
-     ```
-
-2. Add a welcome page in this location src/main/resources/static
-
-   ```html
-   <!DOCTYPE html>
-   <html>
-       <head>
-           <meta charset="UTF-8">
-           <title>Welcome Page</title>
-       </head>
-   <body>
-       <h1>Welcome Page</h1>
-       <p>Add new tutorial click <a href="/addnew">here</a></p>
-   </body>
-   </html>
-   ```
-   
-3. Create a TutorialService class that will act as the Controller.
+1. Create Views: HomeView, StudentView, ErrorView and DashboardView java classes.
 
    ```java
-   import org.springframework.stereotype.Controller;
-   import org.springframework.ui.Model;
-   import org.springframework.web.bind.annotation.GetMapping;
-   import org.springframework.web.bind.annotation.ModelAttribute;
-   import org.springframework.web.bind.annotation.PostMapping;
+   package com.example.webdemo.front;
 
-   @Controller
-   public class TutorialService {
-       @GetMapping("/addnew")
-       public String addNewForm(Model model) {
-           model.addAttribute("tutorial", new Tutorial());
-           return "addnew";
-       }
+   public class HomeView {
+   	public void show() {
+   		System.out.println("Displaying Home Page");
+   	}
+   }
+   ```
+   ```java
+   package com.example.webdemo.front;
 
-       @PostMapping("/addnew")
-       public String addNewSubmit(@ModelAttribute Tutorial tutorial, Model model) {
-           model.addAttribute("tutorial", tutorial);
-           return "result";
-       }
+   public class StudentView {
+   	public void show() {
+   		System.out.println("Displaying Student Page");
+   	}
+   }
+   ```
+   ```java
+   package com.example.webdemo.front;
+
+   public class ErrorView {
+   	public void show() {
+   		System.out.println("Displaying Error Page");
+   	}
+   }
+   ```
+   ```java
+   package com.example.webdemo.front;
+
+   public class DashboardView {
+   	public void show() {
+   		System.out.println("Displaying Dashboad Page");
+   	}
    }
    ```
 
-   This controller is concise and simple, but a lot is going on. The rest of this section analyzes it step by step.
-   - The mapping annotations let you map HTTP requests to specific controller methods. The two methods in this controller are both mapped to /addnew.
-   - You can use @RequestMapping (which, by default, maps all HTTP operations, such as GET, POST, and so forth).
-   - However, in this case, the addNewForm() method is specifically mapped to GET by using @GetMapping, while addNewSubmit() is mapped to POST with @PostMapping.
-   - This mapping lets the controller differentiate the requests to the /addnew endpoint.
-   - The addNewForm() method uses a Model object to expose a new Tutorial to the view template.
-   - The implementation of the method body relies on a view technology to perform server-side rendering of the HTML by converting the view name (addnew) into a template to render.
-   - In this case, we use Thymeleaf, which parses the addnew.html template and evaluates the various template expressions to render the form.
-   - The following listing (from src/main/resources/templates/addnew.html) shows the addnew template.
-
-5. Create the 'Add New Tutorial' form page in this location src/main/resources/templates
-
-   ```html
-   <!DOCTYPE HTML>
-   <html xmlns:th="https://www.thymeleaf.org">
-   <head>
-      <title>Add New Tutorial</title>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-   </head>
-   <body>
-      <h1>Add New Tutorial</h1>
-      <form action="#" th:action="@{/addnew}" th:object="${tutorial}" method="post">
-         <p>Title: <input type="text" th:field="*{title}" /></p>
-         <p>Description: <input type="text" th:field="*{description}" /></p>
-         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-      </form>
-   </body>
-   </html>
-   ```
-
-   - The th:action="@{/addnew}" expression directs the form to POST to the /addnew endpoint, while the th:object="${tutorial}" expression declares the model object to use for collecting the form data.
-   - The three form fields, expressed with th:field="{id}", th:field="{title}" and th:field="{description}", correspond to the fields in the Tutorial object.
-   - That covers the controller, model, and view for presenting the form. Now we can review the process of submitting the form.
-   - As noted earlier, the form submits to the /addnew endpoint by using a POST call.
-   - The addNewSubmit() method receives the Tutorial object that was populated by the form.
-   - The Tutorial is a @ModelAttribute, so it is bound to the incoming form content.
-   - Also, the submitted data can be rendered in the result view by referring to it by name (by default, the name of the method parameter, so tutorial in this case).
-   - The id is rendered in the ```<p th:text="'id: ' + ${tutorial.id}" />``` expression.
-   - Likewise, the title is rendered in the ```<p th:text="'title: ' + ${tutorial.title}" />``` expression.
-   - The following listing (from src/main/resources/templates/result.html) shows the result template.
-
-4. Create the 'Result' page in this location src/main/resources/templates
-
-   ```html
-   <!DOCTYPE HTML>
-   <html xmlns:th="https://www.thymeleaf.org">
-   <head>
-      <title>Result</title>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-   </head>
-   <body>
-      <h1>Result</h1>
-      <p th:text="'Id: ' + ${tutorial.id}" />
-      <p th:text="'Title: ' + ${tutorial.title}" />
-      <p th:text="'Description: ' + ${tutorial.description}" />
-      <p th:text="'Published: ' + ${tutorial.published}" />
-      <a href="/addnew">Add another</a>
-   </body>
-   </html>
-   ```
-
-   For clarity, this example uses two separate view templates for rendering the form and displaying the submitted data. However, you can use a single view for both purposes.
-
-5. Test the service.
-
-   Now that the web site is running, visit http://localhost:8080/addnew, where you see the following form.
-
-   <img width="171" alt="image" src="https://github.com/asmalizaa/javaspring/assets/23090837/cefbb518-6015-4f3d-a60e-1f282def3460">
-
-   Submit an ID, Title and Description to see the results.
-
-   <img width="119" alt="image" src="https://github.com/asmalizaa/javaspring/assets/23090837/4164c91b-0d90-40bb-bf81-6c58305eac98">
-
-   Congratulations! You have just used Spring to create and submit a form.
-
-6. To save the new record into database table, update the controller with below codes.
+2. Create Dispatcher class: Dispatcher.java
 
    ```java
-   import org.springframework.beans.factory.annotation.Autowired;
-   import org.springframework.stereotype.Controller;
-   import org.springframework.ui.Model;
-   import org.springframework.web.bind.annotation.GetMapping;
-   import org.springframework.web.bind.annotation.ModelAttribute;
-   import org.springframework.web.bind.annotation.PostMapping;
+   package com.example.webdemo.front;
 
-   @Controller
-   public class TutorialService {
-       // to save record to db
-       // first inject the repository object
-       @Autowired
-       TutorialRepository tutorialRepository;
+   public class Dispatcher {
+   	private StudentView studentView;
+   	private HomeView homeView;
+   	private DashboardView dashboardView;
+   	private ErrorView errorView;
 
-       @GetMapping("/addnew")
-       public String addNewForm(Model model) {
-           model.addAttribute("tutorial", new Tutorial());
-           return "addnew";
-       }
+   	public Dispatcher() {
+   		studentView = new StudentView();
+   		homeView = new HomeView();
+   		dashboardView = new DashboardView();
+   		errorView = new ErrorView();
+   	}
 
-       @PostMapping("/addnew")
-       public String addNewSubmit(@ModelAttribute Tutorial tutorial, Model model) {
-           // save new tutorial into db and the return result view
-           Tutorial _tutorial = tutorialRepository
-               .save(new Tutorial(tutorial.getTitle(), tutorial.getDescription(), tutorial.isPublished()));
-           model.addAttribute("tutorial", _tutorial);
-           return "result";
-       }
+   	public void dispatch(String request) {
+   		if (request.equalsIgnoreCase("STUDENT")) {
+   			studentView.show();
+   		} else if (request.equalsIgnoreCase("DASHBOARD")) {
+   			dashboardView.show();
+   		} else if (request.equalsIgnoreCase("HOME")) {
+   			homeView.show();
+   		} else {
+   			errorView.show();
+   		}
+   	}
    }
    ```
 
-   Make sure to check the database table to ensure the new record was successfully added.
+3. Create Front Controller class: FrontController.java
+
+   ```java
+   package com.example.webdemo.front;
+
+   public class FrontController {
+   	private Dispatcher dispatcher;
+
+   	public FrontController() {
+   		dispatcher = new Dispatcher();
+   	}
+
+   	private boolean isAuthenticUser() {
+   		System.out.println("User is authenticated successfully.");
+   		return true;
+   	}
+
+   	private void trackRequest(String request) {
+   		System.out.println("Page requested: " + request);
+   	}
+
+   	public void dispatchRequest(String request) {
+   		//log each request
+   		trackRequest(request);
+
+   		//authenticate the user
+   		if (isAuthenticUser()) {
+   			dispatcher.dispatch(request);
+   		}
+   	}
+   }
+   ```
+
+4. Use the FrontController to demonstrate Front Controller Design Pattern: FrontControllerPatternDemo.java
+
+   ```java
+   package com.example.webdemo.front;
+
+   public class FrontControllerPatternDemo {
+   	public static void main(String[] args) {
+   		FrontController frontController = new FrontController();
+   		frontController.dispatchRequest("HOME");
+   		frontController.dispatchRequest("STUDENT");
+   		frontController.dispatchRequest("DASHBOARD");
+   		frontController.dispatchRequest("ERROR");
+   	}
+   }
+   ```
    
 ## A Request/Response Cycle
 
