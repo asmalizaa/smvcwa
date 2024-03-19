@@ -60,7 +60,117 @@ JSP Processing is illustrated and discussed in sequential steps prior to which a
 
 **Example**
 
+Note: This example was taken loosely from this tutorial (https://www.javaguides.net/2020/05/spring-boot-jsp-example-tutorial.html)
 
+In this example, we are going to create a simple Spring MVC application that will display Hello message on the browser.
+
+1. Create a new project using [Spring Initialzr](https://start.spring.io/) with below configurations.
+
+   - Project: Maven
+   - Language: Java
+   - Spring Boot: default
+   - Group: default
+   - Artifact: webdemo
+   - Name: webdemo
+   - Description: default
+   - Package Name: com.example.webdemo
+   - Packaging: jar
+   - Java: 21 (or choose the version installed on your machine)
+   - Dependencies: Spring Web, Spring Boot DevTools
+
+   Generate the project. Once the generated file downloaded, extract and import into your eclipse.
+
+2. Add maven dependencies into pom.xml
+
+   ```xml
+   <!--
+		https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api -->
+   <dependency>
+       <groupId>jakarta.servlet.jsp.jstl</groupId>
+       <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+   </dependency>
+
+   <!--
+		https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
+   <dependency>
+       <groupId>org.apache.tomcat.embed</groupId>
+       <artifactId>tomcat-embed-jasper</artifactId>
+   </dependency>
+   ```
+   We need to include the tomcat-embed-jasper dependency to allow our application to compile and render JSP pages. Finally, we need to include the jstl library, which will provide the JSTL tags support required in our JSP pages.
+
+3. Create MVC Controller called HelloController.java and add codes below.
+
+   ```java
+   package com.example.webdemo;
+
+   import org.springframework.stereotype.Controller;
+   import org.springframework.ui.Model;
+   import org.springframework.web.bind.annotation.GetMapping;
+   import org.springframework.web.bind.annotation.RequestParam;
+
+   @Controller
+   public class HelloController {
+
+       @GetMapping({ "/", "/hello" })
+       public String hello(@RequestParam(value = "name", defaultValue = "World") String name, Model model) {
+           model.addAttribute("name", name);
+           return "hello";
+       }
+   }
+   ```
+
+4. Create the JSP ViewResolver configuration class called  AppConfig.java
+
+   ```java
+   package com.example.webdemo;
+
+   import org.springframework.context.annotation.Bean;
+   import org.springframework.context.annotation.ComponentScan;
+   import org.springframework.context.annotation.Configuration;
+   import org.springframework.web.servlet.ViewResolver;
+   import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+   import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+   import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+   @Configuration
+   @EnableWebMvc
+   @ComponentScan("com.example.webdemo")
+   public class AppConfig implements WebMvcConfigurer {
+
+       @Bean
+       public ViewResolver viewResolver() {
+           InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+           resolver.setPrefix("/WEB-INF/jsp/");
+           resolver.setSuffix(".jsp");
+           resolver.setOrder(1);
+           return resolver;
+       }
+   }
+   ```
+
+   This configuration is very important in order to make sure Spring container able to locate the view component to be returned for each request.
+
+5. Create the JSP page. This file should be created in webapp/WEB-INF/jsp folder. If webapp folder not exists then create it under src/main/webapp/WEB-INF/jsp and then create JSP pages under it.
+
+   ```jsp
+   <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+   <!DOCTYPE html>
+   <html>
+   <head>
+       <meta charset="UTF-8">
+       <title>Hello World</title>
+   </head>
+   <body>
+       <h1 align="center">Hello ${name}!</h1>
+   </body>
+   </html>
+   ```
+   
+6. Let's run this spring boot application from IDE -> Right click -> Run As -> Java Application and to test it, launch your browser and type this address (http://localhost:8080/hello)
+
+
+   
 
 ## The MVC Pattern
 
