@@ -305,3 +305,52 @@ Spring MVC request flow is depicted in the diagram below:
 9. Once the view to be rendered has been identified, Dispatcher Servlet passes model object to the view. Model object contains the data which needs to be displayed in the view. View will be rendered with the model data. Views can be designed in any front-end technology.
 10. This view is returned to the client and client can see the view and associated data on his browser.
 
+## The Strategy Pattern
+
+Reference: (https://www.geeksforgeeks.org/strategy-pattern-set-1/)
+
+In computer programming, the strategy pattern (also known as the policy pattern) is a behavioral software design pattern that enables selecting an algorithm at runtime. Instead of implementing a single algorithm directly, code receives run-time instructions as to which in a family of algorithms to use.
+
+In simpler terms, The Strategy Pattern allows you to define a family of algorithms, encapsulate each one of them, and make them interchangeable. This pattern lets the algorithm vary independently from clients that use it.
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/da86bc49-e162-422d-87a5-7e99bafa4b45)
+
+### Characteristics of the Strategy Design Pattern?
+
+The Strategy Design Pattern exhibits several key characteristics that make it distinctive and effective for managing algorithm variations in software systems:
+
+- It defines a family of algorithms: The pattern allows you to encapsulate multiple algorithms or behaviors into separate classes, known as strategies.
+- It encapsulates behaviors: Each strategy encapsulates a specific behavior or algorithm, providing a clean and modular way to manage different variations or implementations.
+- It enables dynamic behavior switching: The pattern enables clients to switch between different strategies at runtime, allowing for flexible and dynamic behavior changes.
+- It promotes object collaboration: The pattern encourages collaboration between a context object and strategy objects, where the context delegates the execution of a behavior to a strategy object.
+
+Overall, the Strategy pattern is a useful design pattern that allows the behavior of an object to be selected dynamically at runtime, providing flexibility, modularity, and testability.
+
+### Components of the Strategy Design Pattern
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/685a5b23-27cb-4aed-b7d0-7765bb1a4dd6)
+
+1. Context
+
+   The Context is a class or object that holds a reference to a strategy object and delegates the task to it.
+   - It acts as the interface between the client and the strategy, providing a unified way to execute the task without knowing the details of how it’s done.
+   - The Context maintains a reference to a strategy object and calls its methods to perform the task, allowing for interchangeable strategies to be used.
+
+2. Strategy Interface
+
+   The Strategy Interface is an interface or abstract class that defines a set of methods that all concrete strategies must implement.
+   - It serves as a contract, ensuring that all strategies adhere to the same set of rules and can be used interchangeably by the Context.
+   - By defining a common interface, the Strategy Interface allows for decoupling between the Context and the concrete strategies, promoting flexibility and modularity in the design.
+
+3. Concrete Strategy
+
+   Concrete Strategies are the various implementations of the Strategy Interface. Each concrete strategy provides a specific algorithm or behavior for performing the task defined by the Strategy Interface.
+   - Concrete strategies encapsulate the details of their respective algorithms and provide a method for executing the task.
+   - They are interchangeable and can be selected and configured by the client based on the requirements of the task.
+     
+4. Client
+
+   The Client is responsible for selecting and configuring the appropriate strategy and providing it to the Context.
+   - It knows the requirements of the task and decides which strategy to use based on those requirements.
+   - The client creates an instance of the desired concrete strategy and passes it to the Context, enabling the Context to use the selected strategy to perform the task.
+
