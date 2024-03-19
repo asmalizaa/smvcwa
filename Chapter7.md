@@ -34,3 +34,107 @@ The following table provides more details on the ViewResolver hierarchy:
   </tr>
 </table>
 
+## @RequestMapping
+
+You can use the @RequestMapping annotation to map requests to controllers methods. It has various attributes to match by URL, HTTP method, request parameters, headers, and media types. You can use it at the class level to express shared mappings or at the method level to narrow down to a specific endpoint mapping.
+
+There are also HTTP method specific shortcut variants of @RequestMapping:
+- @GetMapping
+- @PostMapping
+- @PutMapping
+- @DeleteMapping
+- @PatchMapping
+
+```java
+@RestController
+@RequestMapping("/persons")
+class PersonController {
+
+	@GetMapping("/{id}")
+	public Person getPerson(@PathVariable Long id) {
+		// ...
+	}
+
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public void add(@RequestBody Person person) {
+		// ...
+	}
+}
+```
+
+## @RequestParam
+
+You can use the @RequestParam annotation to bind Servlet request parameters (that is, query parameters or form data) to a method argument in a controller.
+
+The following example shows how to do so:
+
+```java
+@Controller
+@RequestMapping("/pets")
+public class EditPetForm {
+
+	// ...
+
+	@GetMapping
+	public String setupForm(@RequestParam("petId") int petId, Model model) {
+		Pet pet = this.clinic.loadPet(petId);
+		model.addAttribute("pet", pet);
+		return "petForm";
+	}
+
+	// ...
+
+}
+```
+> 	Using @RequestParam to bind petId.
+
+By default, method parameters that use this annotation are required, but you can specify that a method parameter is optional by setting the @RequestParam annotation’s required flag to false or by declaring the argument with an java.util.Optional wrapper.
+
+Type conversion is automatically applied if the target method parameter type is not String.
+
+## Command Object
+
+In Spring Web MVC you can use any object as a command or form-backing object; you do not need to implement a framework-specific interface or base class. 
+
+Spring's data binding is highly flexible: for example, it treats type mismatches as validation errors that can be evaluated by the application, not as system errors. Thus you need not duplicate your business objects' properties as simple, untyped strings in your form objects simply to handle invalid submissions, or to convert the Strings properly. Instead, it is often preferable to bind directly to your business objects.
+
+## Return Types
+
+The following are the supported return types:
+
+- A **ModelAndView** object, with the model implicitly enriched with command objects and the results of @ModelAttribute annotated reference data accessor methods.
+- A **Model** object, with the view name implicitly determined through a RequestToViewNameTranslator and the model implicitly enriched with command objects and the results of **@ModelAttribute** annotated reference data accessor methods.
+- A **Map** object for exposing a model, with the view name implicitly determined through a RequestToViewNameTranslator and the model implicitly enriched with command objects and the results of **@ModelAttribute** annotated reference data accessor methods.
+- A **View** object, with the model implicitly determined through command objects and **@ModelAttribute** annotated reference data accessor methods. The handler method may also programmatically enrich the model by declaring a Model argument (see above).
+- A **String** value that is interpreted as the logical view name, with the model implicitly determined through command objects and **@ModelAttribute** annotated reference data accessor methods. The handler method may also programmatically enrich the model by declaring a Model argument (see above).
+- **void** if the method handles the response itself (by writing the response content directly, declaring an argument of type **ServletResponse / HttpServletResponse** for that purpose) or if the view name is supposed to be implicitly determined through a **RequestToViewNameTranslator** (not declaring a response argument in the handler method signature).
+- If the method is annotated with **@ResponseBody**, the return type is written to the response HTTP body. The return value will be converted to the declared method argument type using **HttpMessageConverters**. 
+- A **HttpEntity<?>** or **ResponseEntity<?>** object to provide access to the Servlet response HTTP headers and contents. The entity body will be converted to the response stream using **HttpMessageConverters**. 
+- A **Callable<?>** can be returned when the application wants to produce the return value asynchronously in a thread managed by Spring MVC.
+- A **DeferredResult<?>** can be returned when the application wants to produce the return value from a thread of its own choosing.
+- Any other return type is considered to be a single model attribute to be exposed to the view, using the attribute name specified through **@ModelAttribute** at the method level (or the default attribute name based on the return type class name). The model is implicitly enriched with command objects and the results of **@ModelAttribute** annotated reference data accessor methods.
+
+## Path Variables
+
+The @PathVariable annotation can be used to handle template variables in the request URI mapping, and set them as method parameters.
+
+A simple use case of the @PathVariable annotation would be an endpoint that identifies an entity with a primary key.
+
+```java
+@GetMapping("/api/employees/{id}")
+@ResponseBody
+public String getEmployeesById(@PathVariable String id) {
+    return "ID: " + id;
+}
+```
+
+In this example, we use the @PathVariable annotation to extract the templated part of the URI, represented by the variable {id}.
+
+A simple GET request to /api/employees/{id} will invoke getEmployeesById with the extracted id value:
+
+```
+http://localhost:8080/api/employees/111 
+---- 
+ID: 111
+```
