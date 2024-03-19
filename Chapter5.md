@@ -358,6 +358,30 @@ public class GenericsConfig {
 }
 ```
 
+Next, create the component class where the generic list will be injected.
+
+```java
+package com.example.generics;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Transport {
+
+	@Autowired
+	private List<Car> vehicles;
+	
+	public void printList() {
+		for (Vehicle v : vehicles) {
+			System.out.println(v);
+		}
+	}
+}
+```
+
 Finally, the application class.
 
 ```java
@@ -370,8 +394,8 @@ public class GenericsApp {
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(GenericsConfig.class);
 
-		Car car = context.getBean(Car.class);
-		System.out.println(car);
+		Transport t = context.getBean(Transport.class);
+		t.printList();
 
 		context.close();
 	}
@@ -384,3 +408,46 @@ Run the application and verify the output.
 > Name: E280<br/>
 > Manufacturer: Mercedes<br/>
 > Engine Type: Diesel
+
+Now, try create another type of Vehicle object, Motorcycle.
+
+```java
+package com.example.generics;
+
+public class Motorcycle extends Vehicle {
+
+	private boolean twoWheeler;
+
+	public Motorcycle(String name, String manufacturer, boolean twoWheeler) {
+		super(name, manufacturer);
+		this.twoWheeler = twoWheeler;
+	}
+
+	public boolean isTwoWheeler() {
+		return twoWheeler;
+	}
+
+	public void setTwoWheeler(boolean twoWheeler) {
+		this.twoWheeler = twoWheeler;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "\nTwo Wheeler Type: " + isTwoWheeler();
+	}
+
+}
+```
+
+Then, to test it, update the Transport class to use Motorcycle as the generic type.
+
+```java
+@Autowired
+private List<Motorcycle> vehicles;
+```
+
+Run the application and verify the output now contain details of the Motorcycle object instead.
+
+> Name: Z900<br/>
+> Manufacturer: Kawasaki<br/>
+> Two Wheeler Type: true
