@@ -369,4 +369,87 @@ After submitting the form.
 
 ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/e89d5e19-2dfe-41d1-8e85-363b21484c8b)
 
+## RESTful Web Services
 
+REST or Representational State Transfer is an architectural style that can be applied to web services to create and enhance properties like performance, scalability, and modifiability. RESTful web services are generally highly scalable, light, and maintainable and are used to create APIs for web-based applications. It exposes API from an application in a secure and stateless manner to the client. The protocol for REST is HTTP. In this architecture style, clients and servers use a standardized interface and protocol to exchange representation of resources.
+
+**REST became popular due to the following reasons:** 
+
+1. It allows web applications built using different programming languages to communicate with each other. Also, web applications may reside in different environments, like on Windows, or for example, Linux.
+2. Mobile devices have become more popular than desktops. Using REST, you don’t need to worry about the underlying layer for the device. Therefore, it saves the amount of effort it would take to code applications on mobiles to talk with normal web applications.
+3. Modern applications have to be made compatible with the Cloud. As Cloud-based architectures work using the REST principle, it makes sense for web services to be programmed using the REST service-based architecture.
+
+**RESTful Architecture:**
+
+1. Division of State and Functionality:
+
+   State and functionality are divided into distributed resources. This is because every resource has to be accessible via normal HTTP commands. That means a user should be able to issue the GET request to get a file, issue the POST or PUT request to put a file on the server, or issue the DELETE request to delete a file from the server.
+
+2. Stateless, Layered, Caching-Support, Client/Server Architecture:
+
+   A type of architecture where the web browser acts as the client, and the web server acts as the server hosting the application, is called a client/server architecture. The state of the application should not be maintained by REST. The architecture should also be layered, meaning that there can be intermediate servers between the client and the end server. It should also be able to implement a well-managed caching mechanism.
+
+**Principles of RESTful applications:**
+
+1. URI Resource Identification:
+
+   A RESTful web service should have a set of resources that can be used to select targets of interactions with clients. These resources can be identified by URI (Uniform Resource Identifiers). The URIs provide a global addressing space and help with service discovery.
+
+2. Uniform Interface:
+
+   Resources should have a uniform or fixed set of operations, such as PUT, GET, POST, and DELETE operations. This is a key principle that differentiates between a REST web service and a non-REST web service.
+
+3. Self-Descriptive Messages:
+
+   As resources are decoupled from their representation, content can be accessed through a large number of formats like HTML, PDF, JPEG, XML, plain text, JSON, etc. The metadata of the resource can be used for various purposes like control caching,  detecting transmission errors, finding the appropriate representation format, and performing authentication or access control.
+
+4. Use of Hyperlinks for State Interactions:
+
+   In REST, interactions with a resource are stateless, that is, request messages are self-contained. So explicit state transfer concept is used to provide stateful interactions. URI rewriting, cookies, and form fields can be used to implement the exchange of state. A state can also be embedded in response messages and can be used to point to valid future states of interaction.
+
+**Advantages of RESTful web services:**
+
+1. Speed: As there is no strict specification, RESTful web services are faster as compared to SOAP. It also consumes fewer resources and bandwidth.
+2. Compatible with SOAP: RESTful web services are compatible with SOAP, which can be used as the implementation.
+3. Language and Platform Independency: RESTful web services can be written in any programming language and can be used on any platform.
+4. Supports Various Data Formats: It permits the use of several data formats like HTML, XML, Plain Text, JSON, etc.
+
+A simple example of Spring Restful Web Service application.
+
+```java
+package com.example.cookiesdemo;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api")
+public class MyRestService {
+
+	@GetMapping("/get")
+	public String getSomething() {
+		return "This is GET";
+	}
+
+	@PostMapping("/post")
+	public String postSomething() {
+		return "This is POST";
+	}
+
+	@PutMapping("/put")
+	public String putSomething() {
+		return "This is PUT";
+	}
+
+	@DeleteMapping("/delete")
+	public String deleteSomething() {
+		return "This is DELETE";
+	}
+}
+```
+
+Run the application and use Postman to test the service.
