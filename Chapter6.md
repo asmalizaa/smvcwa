@@ -534,3 +534,17 @@ Overall, the Strategy pattern is a useful design pattern that allows the behavio
    > Sorting using Bubble Sort<br/>
    > Sorting using Merge Sort<br/>
    > Sorting using Quick Sort
+
+## Web Application Contexts
+
+Reference: (https://www.baeldung.com/spring-web-contexts)
+
+Every Spring webapp has an associated application context that is tied to its lifecycle: the root web application context.
+
+This is an old feature that predates Spring Web MVC, so it’s not tied specifically to any web framework technology.
+
+The context is started when the application starts, and it’s destroyed when it stops, thanks to a servlet context listener. The most common types of contexts can also be refreshed at runtime, although not all ApplicationContext implementations have this capability.
+
+The context in a web application is always an instance of WebApplicationContext. That’s an interface extending ApplicationContext with a contract for accessing the ServletContext.
+
+Anyway, applications usually should not be concerned about those implementation details: the root web application context is simply a centralized place to define shared beans.
