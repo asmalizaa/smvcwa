@@ -8,7 +8,7 @@
 6. [The Web Module](https://github.com/asmalizaa/smvcwa/blob/main/Chapter6.md)
 7. [Handling Requests](https://github.com/asmalizaa/smvcwa/blob/main/Chapter7.md)
 8. [Working with Forms](https://github.com/asmalizaa/smvcwa/blob/main/Chapter8.md)
-9. Data Binding
+9. [Data Binding](https://github.com/asmalizaa/smvcwa/blob/main/Chapter9.md)
 10. Validation
 11. Configuring Spring MVC
 12. Interceptors
