@@ -2,6 +2,11 @@
 
 Reference: (https://docs.spring.io/spring-framework/reference/core/validation/beans-beans.html#page-title)
 
+In data binding what we have to do is we have to capture or store the data so that we can bind that data with another resource (for example displaying the data in the frontend part) as per our needs or we can also read the data from a variable and display it as per our requirements. In Spring using the data binding concept, we can do the following two tasks:
+
+1. We can read from a variable
+2. We can write to a variable
+
 Data binding is useful for binding user input to a target object where user input is a map with property paths as keys, following JavaBeans conventions. DataBinder is the main class that supports this, and it provides two ways to bind user input:
 
 - Constructor binding - bind user input to a public data constructor, looking up constructor argument values in the user input.
@@ -38,79 +43,6 @@ One quite important class in the beans package is the BeanWrapper interface and 
 
 The way the BeanWrapper works is partly indicated by its name: it wraps a bean to perform actions on that bean, such as setting and retrieving properties.
 
-## Setting and Getting Basic and Nested Properties
-
-Setting and getting properties is done through the setPropertyValue and getPropertyValue overloaded method variants of BeanWrapper.
-
-The following two example classes use the BeanWrapper to get and set properties:
-
-```java
-public class Company {
-
-	private String name;
-	private Employee managingDirector;
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Employee getManagingDirector() {
-		return this.managingDirector;
-	}
-
-	public void setManagingDirector(Employee managingDirector) {
-		this.managingDirector = managingDirector;
-	}
-}
-```
-```java
-public class Employee {
-
-	private String name;
-
-	private float salary;
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public float getSalary() {
-		return salary;
-	}
-
-	public void setSalary(float salary) {
-		this.salary = salary;
-	}
-}
-```
-
-The following code snippets show some examples of how to retrieve and manipulate some of the properties of instantiated Companys and Employees:
-
-```java
-BeanWrapper company = new BeanWrapperImpl(new Company());
-// setting the company name..
-company.setPropertyValue("name", "Some Company Inc.");
-// ... can also be done like this:
-PropertyValue value = new PropertyValue("name", "Some Company Inc.");
-company.setPropertyValue(value);
-
-// ok, let's create the director and tie it to the company:
-BeanWrapper jim = new BeanWrapperImpl(new Employee());
-jim.setPropertyValue("name", "Jim Stravinsky");
-company.setPropertyValue("managingDirector", jim.getWrappedInstance());
-
-// retrieving the salary of the managingDirector through the company
-Float salary = (Float) company.getPropertyValue("managingDirector.salary");
-```
-
 ## PropertyEditor's
 
 Spring uses the concept of a PropertyEditor to effect the conversion between an Object and a String. 
@@ -129,6 +61,8 @@ Spring has a number of built-in PropertyEditor implementations to make life easy
 The following Java source code for the referenced SomethingBeanInfo class associates a CustomNumberEditor with the age property of the Something class:
 
 ```java
+package com.example.webdemo.binder;
+
 public class SomethingBeanInfo extends SimpleBeanInfo {
 
 	public PropertyDescriptor[] getPropertyDescriptors() {
@@ -145,6 +79,55 @@ public class SomethingBeanInfo extends SimpleBeanInfo {
 		catch (IntrospectionException ex) {
 			throw new Error(ex.toString());
 		}
+	}
+}
+```
+
+**Something.java class**
+
+```java
+package com.example.webdemo.binder;
+
+public class Something {
+	private int age;
+
+	public Something() {
+
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+}
+```
+
+**BinderApp.java application class**
+
+```java
+package com.example.webdemo.binder;
+
+import java.beans.PropertyDescriptor;
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BinderApp {
+
+	public static void main(String[] args) {
+
+		SomethingBeanInfo info = new SomethingBeanInfo();
+		PropertyDescriptor[] props = info.getPropertyDescriptors();
+		System.out.println(props[0]);
+		System.out.println(props[0].getName());
+		System.out.println(props[0].getDisplayName());
+		System.out.println(props[0].getPropertyType());
+		System.out.println(props[0].getReadMethod());
+		System.out.println(props[0].getWriteMethod());
+
 	}
 }
 ```
