@@ -189,6 +189,154 @@ You will build a simple Spring MVC application that takes user input and checks 
    ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/a9447d9b-549e-400d-ac4d-33649d1b5e53)
    
 
+## Validation by Using Spring’s Validator Interface
+
+Spring features a Validator interface that you can use to validate objects. The Validator interface works by using an Errors object so that, while validating, validators can report validation failures to the Errors object.
+
+Consider the following example of a small data object:
+
+```java
+package com.example.webdemo.validation;
+
+public class Person {
+
+	private String name;
+	private int age;
+
+	public Person() {
+
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+}
+```
+
+The next example provides validation behavior for the Person class by implementing the following two methods of the org.springframework.validation.Validator interface:
+
+- supports(Class): Can this Validator validate instances of the supplied Class?
+- validate(Object, org.springframework.validation.Errors): Validates the given object and, in case of validation errors, registers those with the given Errors object.
+
+Implementing a Validator is fairly straightforward, especially when you know of the ValidationUtils helper class that the Spring Framework also provides. The following example implements Validator for Person instances:
+
+```java
+package com.example.webdemo.validation;
+
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
+
+@Component
+public class PersonValidator implements Validator {
+
+	/**
+	 * This Validator validates only Person instances
+	 */
+	public boolean supports(Class clazz) {
+		return Person.class.equals(clazz);
+	}
+
+	public void validate(Object obj, Errors e) {
+		ValidationUtils.rejectIfEmpty(e, "name", "name.empty");
+		Person p = (Person) obj;
+		if (p.getAge() < 0) {
+			e.rejectValue("age", "negativevalue");
+			System.out.println("Rejected value: age is negative value");
+		} else if (p.getAge() > 110) {
+			e.rejectValue("age", "too.darn.old");
+			System.out.println("Rejected value: age is greater than 110");
+		}
+	}
+}
+```
+
+Here's the PersonController class.
+
+```java
+package com.example.webdemo.validation;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+public class PersonController {
+
+	@Autowired
+	private PersonValidator personValidator;
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(personValidator);
+	}
+
+	@GetMapping("/getperson")
+	public String getPerson() {
+		return "get-person";
+	}
+
+	@PostMapping("/getperson")
+	public String getPersonDetails(@Validated Person person, Model model, BindingResult result) {
+		if (result.hasErrors()) {
+			return "error-person";
+		}
+		model.addAttribute("name", person.getName());
+		model.addAttribute("age", person.getAge());
+		return "person-details";
+	}
+}
+```
+
+The view components: person-details.jsp and error-person.jsp
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Person Details</title>
+</head>
+<body>
+	<h1 align="center">Person Details</h1>
+	<hr />
+	<p>Name is: ${person.name}</p>
+	<p>Age is: ${person.age}</p>
+</body>
+</html>
+```
+
+```jsp
+<html>
+<head>
+</head>
+<body>
+	<h1 align="center">Validation Failed</h1>
+</body>
+</html>
+```
 
 
    
