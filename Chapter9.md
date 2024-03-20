@@ -159,3 +159,93 @@ public class FormController {
 	// ...
 }
 ```
+
+## Spring Type Conversion
+
+The core.convert package provides a general type conversion system. The system defines an SPI to implement type conversion logic and an API to perform type conversions at runtime. Within a Spring container, you can use this system as an alternative to PropertyEditor implementations to convert externalized bean property value strings to the required property types. You can also use the public API anywhere in your application where type conversion is needed.
+
+### Converter SPI
+
+The SPI to implement type conversion logic is simple and strongly typed, as the following interface definition shows:
+
+```java
+package org.springframework.core.convert.converter;
+
+public interface Converter<S, T> {
+
+	T convert(S source);
+}
+```
+
+To create your own converter, implement the Converter interface and parameterize S as the type you are converting from and T as the type you are converting to. You can also transparently apply such a converter if a collection or array of S needs to be converted to an array or collection of T, provided that a delegating array or collection converter has been registered as well (which DefaultConversionService does by default).
+
+## Spring Field Formatting
+
+Now consider the type conversion requirements of a typical client environment, such as a web or desktop application. In such environments, you typically convert from String to support the client postback process, as well as back to String to support the view rendering process. In addition, you often need to localize String values. The more general core.convert Converter SPI does not address such formatting requirements directly. To directly address them, Spring provides a convenient Formatter SPI that provides a simple and robust alternative to PropertyEditor implementations for client environments.
+
+In general, you can use the Converter SPI when you need to implement general-purpose type conversion logic — for example, for converting between a java.util.Date and a Long. You can use the Formatter SPI when you work in a client environment (such as a web application) and need to parse and print localized field values. The ConversionService provides a unified type conversion API for both SPIs.
+
+### The Formatter SPI
+
+The Formatter SPI to implement field formatting logic is simple and strongly typed. The following listing shows the Formatter interface definition:
+
+```java
+package org.springframework.format;
+
+public interface Formatter<T> extends Printer<T>, Parser<T> {
+}
+```
+
+Formatter extends from the Printer and Parser building-block interfaces. The following listing shows the definitions of those two interfaces:
+
+```java
+public interface Printer<T> {
+
+	String print(T fieldValue, Locale locale);
+}
+```
+```java
+import java.text.ParseException;
+
+public interface Parser<T> {
+
+	T parse(String clientValue, Locale locale) throws ParseException;
+}
+```
+
+To create your own Formatter, implement the Formatter interface shown earlier. Parameterize T to be the type of object you wish to format — for example, java.util.Date. Implement the print() operation to print an instance of T for display in the client locale. Implement the parse() operation to parse an instance of T from the formatted representation returned from the client locale. Your Formatter should throw a ParseException or an IllegalArgumentException if a parse attempt fails. Take care to ensure that your Formatter implementation is thread-safe.
+
+The following DateFormatter is an example Formatter implementation:
+
+```java
+package org.springframework.format.datetime;
+
+public final class DateFormatter implements Formatter<Date> {
+
+	private String pattern;
+
+	public DateFormatter(String pattern) {
+		this.pattern = pattern;
+	}
+
+	public String print(Date date, Locale locale) {
+		if (date == null) {
+			return "";
+		}
+		return getDateFormat(locale).format(date);
+	}
+
+	public Date parse(String formatted, Locale locale) throws ParseException {
+		if (formatted.length() == 0) {
+			return null;
+		}
+		return getDateFormat(locale).parse(formatted);
+	}
+
+	protected DateFormat getDateFormat(Locale locale) {
+		DateFormat dateFormat = new SimpleDateFormat(this.pattern, locale);
+		dateFormat.setLenient(false);
+		return dateFormat;
+	}
+}
+```
