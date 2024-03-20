@@ -23,6 +23,12 @@ In this topic, we will discuss Spring forms and data binding to a controller. Al
        public Employee() {
        }
 
+       public Employee(long id, String name, String contactNumber) {
+           this.id = id;
+           this.name = name;
+           this.contactNumber = contactNumber;
+       }
+
        public long getId() {
            return id;
        }
