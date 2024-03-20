@@ -1,6 +1,90 @@
 # Validation
 
-## Validating Form Input
+## Java Bean Validation
+
+Bean Validation provides a common way of validation through constraint declaration and metadata for Java applications. To use it, you annotate domain model properties with declarative validation constraints which are then enforced by the runtime. There are built-in constraints, and you can also define your own custom constraints.
+
+Consider the following example, which shows a simple PersonForm model with two properties:
+
+```java
+public class PersonForm {
+	private String name;
+	private int age;
+}
+```
+
+Bean Validation lets you declare constraints as the following example shows:
+
+```java
+public class PersonForm {
+
+	@NotNull
+	@Size(max=64)
+	private String name;
+
+	@Min(0)
+	private int age;
+}
+```
+
+A Bean Validation validator then validates instances of this class based on the declared constraints.
+
+## Configuring a Bean Validation Provider
+
+Spring provides full support for the Bean Validation API including the bootstrapping of a Bean Validation provider as a Spring bean. This lets you inject a jakarta.validation.ValidatorFactory or jakarta.validation.Validator wherever validation is needed in your application.
+
+You can use the LocalValidatorFactoryBean to configure a default Validator as a Spring bean, as the following example shows:
+
+```java
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+@Configuration
+public class AppConfig {
+
+	@Bean
+	public LocalValidatorFactoryBean validator() {
+		return new LocalValidatorFactoryBean();
+	}
+}
+```
+
+The basic configuration in the preceding example triggers bean validation to initialize by using its default bootstrap mechanism. A Bean Validation provider, such as the Hibernate Validator, is expected to be present in the classpath and is automatically detected.
+
+## Inject Jakarta Validator
+
+LocalValidatorFactoryBean implements both jakarta.validation.ValidatorFactory and jakarta.validation.Validator, so you can inject a reference to the latter to apply validation logic if you prefer to work with the Bean Validation API directly, as the following example shows:
+
+```java
+import jakarta.validation.Validator;
+
+@Service
+public class MyService {
+
+	@Autowired
+	private Validator validator;
+}
+```
+
+## Inject Spring Validator
+
+In addition to implementing jakarta.validation.Validator, LocalValidatorFactoryBean also adapts to org.springframework.validation.Validator, so you can inject a reference to the latter if your bean requires the Spring Validation API.
+
+For example:
+
+```java
+import org.springframework.validation.Validator;
+
+@Service
+public class MyService {
+
+	@Autowired
+	private Validator validator;
+}
+```
+
+When used as org.springframework.validation.Validator, LocalValidatorFactoryBean invokes the underlying jakarta.validation.Validator, and then adapts ContraintViolations to FieldErrors, and registers them with the Errors object passed into the validate method.
+
+## Activity: Validating Form Input
 
 Reference: (https://spring.io/guides/gs/validating-form-input)
 
@@ -189,7 +273,7 @@ You will build a simple Spring MVC application that takes user input and checks 
    ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/a9447d9b-549e-400d-ac4d-33649d1b5e53)
    
 
-## Validation by Using Spring’s Validator Interface
+## Validation by Using Spring's Validator Interface
 
 Spring features a Validator interface that you can use to validate objects. The Validator interface works by using an Errors object so that, while validating, validators can report validation failures to the Errors object.
 
@@ -337,6 +421,4 @@ The view components: person-details.jsp and error-person.jsp
 </body>
 </html>
 ```
-
-
    
