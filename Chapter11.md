@@ -316,3 +316,8 @@ If we deploy the above application and hit the URL [/SpringApplication/users/dem
   </body>
 <html>
 ```
+
+Below will be the output in the browser.
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/baa376f1-9f7c-47e7-8f8e-d768a5988517)
+
