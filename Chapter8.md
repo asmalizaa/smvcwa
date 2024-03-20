@@ -244,4 +244,17 @@ In this topic, we will discuss Spring forms and data binding to a controller. Al
        }
    }
    ```
-   
+
+7. Test the application.
+
+   Run the application, launch the browser and type this address (http://localhost:8080/employee)
+
+   The register new employe form will be displayed.
+
+   ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/6e4c3756-6d07-4342-98f4-ae910b4d940c)
+
+   Fill up the details then click 'Submit' button. The view employee details page will be displayed.
+
+   ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/1710f854-02ab-4d37-8b28-fd7c78cd1761)
+
+
