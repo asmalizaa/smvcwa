@@ -12,7 +12,7 @@
 10. [Validation](https://github.com/asmalizaa/smvcwa/blob/main/Chapter10.md)
 11. [Configuring Spring MVC](https://github.com/asmalizaa/smvcwa/blob/main/Chapter11.md)
 12. [Interceptors](https://github.com/asmalizaa/smvcwa/blob/main/Chapter12.md)
-13. Persistence with JDBC
+13. [Persistence with JDBC](https://github.com/asmalizaa/smvcwa/blob/main/Chapter13.md)
 14. Persistence with JPA
 
 # Setup
