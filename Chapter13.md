@@ -82,7 +82,21 @@ We will build a Spring Boot Rest API using Spring Data Jdbc with PostgreSQL Data
 
    **Note: Update the password to be the password that you have setup for your local database installation.**
 
-3. The data model.
+   Before continue, make sure a database called **testdb** has been created in postgresql.
+
+   Execute script below to create the **tutorials** table.
+
+   ```sql
+   CREATE TABLE tutorials
+   (
+     id BIGSERIAL PRIMARY KEY NOT NULL,
+     title VARCHAR(255),
+     description VARCHAR(255),
+     published BOOLEAN
+   );
+   ```
+
+4. The data model.
 
    ```java
    package com.example.jdbcdemo;
@@ -148,7 +162,7 @@ We will build a Spring Boot Rest API using Spring Data Jdbc with PostgreSQL Data
    }
    ```
 
-4. Create the JDBC repository.
+5. Create the JDBC repository.
 
    Let’s create a repository to interact with Tutorials from the database.
 
@@ -252,7 +266,7 @@ We will build a Spring Boot Rest API using Spring Data Jdbc with PostgreSQL Data
    – BeanPropertyRowMapper implements RowMapper that converts a table row into a new instance of the specified mapped target class (Tutorial).
    – Tutorial class must be a top-level class and have a default constructor (no-argument).
 
-5. Create Spring Rest APIs Controller.
+6. Create Spring Rest APIs Controller.
 
    Finally, we create a controller that provides APIs for creating, retrieving, updating, deleting and finding Tutorials.
 
@@ -386,4 +400,4 @@ We will build a Spring Boot Rest API using Spring Data Jdbc with PostgreSQL Data
    – @RequestMapping("/api") declares that all Apis’ url in the controller will start with /api.
    – We use @Autowired to inject TutorialRepository bean to local variable.
 
-6. Run and test using Postman.
+7. Run and test using Postman.
