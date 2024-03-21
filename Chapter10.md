@@ -528,11 +528,6 @@ In this activity, we are going to update Employee application to include validat
    		this.contactNumber = contactNumber;
    	}
 
-   	@Override
-   	public String toString() {
-   		return "Id: " + getId() + "\nName: " + getName() + "\nContact Number: " + getContactNumber() + "\nStatus: " + isStatus() + "\nItem: " + getItem() + "\n";
-   	}
-
    	public boolean isStatus() {
    		return status;
    	}
@@ -548,5 +543,127 @@ In this activity, we are going to update Employee application to include validat
    	public void setItem(String item) {
    		this.item = item;
    	}
+   
+   	@Override
+   	public String toString() {
+   		return "Id: " + getId() + "\nName: " + getName() + "\nContact Number: " + getContactNumber() + "\nStatus: " + isStatus() + "\nItem: " + getItem() + "\n";
+   	}
    }
+   ```
+3. Update the controller to handle errors - if validation fails, redirect to form view with error messages.
+
+   ```java
+   package com.example.webdemo.forms;
+
+   import java.util.ArrayList;
+   import java.util.List;
+   import org.springframework.stereotype.Controller;
+   import org.springframework.ui.Model;
+   import org.springframework.ui.ModelMap;
+   import org.springframework.validation.BindingResult;
+   import org.springframework.web.bind.annotation.GetMapping;
+   import org.springframework.web.bind.annotation.ModelAttribute;
+   import org.springframework.web.bind.annotation.PostMapping;
+   import org.springframework.web.servlet.ModelAndView;
+   import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+   import jakarta.validation.Valid;
+
+   @Controller
+   public class EmployeeController {
+
+   	List<String> items = new ArrayList<>() {
+   		{
+   			add("Monday");
+   			add("Tuesday");
+   			add("Wednesday");
+   		}
+   	};
+
+   	@GetMapping("/employee")
+   	public String showForm(Model model) {
+   		// check if redirect or not
+   		// if not, then create new empty employee object and add to model
+   		if (!model.containsAttribute("employee")) {
+   			model.addAttribute("employee", new Employee());
+   		}
+
+   		model.addAttribute("items", items);
+   		// return new ModelAndView("employeeHome", "employee", new Employee());
+   		return "employeeHome";
+   	}
+
+   	@PostMapping("/addEmployee")
+   	public String submit(@Valid @ModelAttribute("employee") Employee employee, BindingResult result, ModelMap model,
+			RedirectAttributes attr) {
+   		if (result.hasErrors()) {
+   			System.out.println(result);
+
+   			// forward bindingresult object to form view
+   			attr.addFlashAttribute("org.springframework.validation.BindingResult.employee", result);
+   			attr.addFlashAttribute("employee", employee);
+
+   			// redirect to form view
+   			return "redirect:/employee";
+   		}
+
+   		model.addAttribute("name", employee.getName());
+   		model.addAttribute("contactNumber", employee.getContactNumber());
+   		model.addAttribute("id", employee.getId());
+   		model.addAttribute("status", employee.isStatus());
+   		model.addAttribute("item", employee.getItem());
+
+   		return "employeeView";
+   	}
+   }
+   ```
+
+4. Update the form view to include codes to display error messages.
+
+   ```
+   <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+   <html>
+   <head>
+   	<style type="text/css">
+   	.error {
+   		color: red;
+   	}
+   	</style>
+   </head>
+   <body>
+	<h3>Welcome, Enter The Employee Details</h3>
+	<form:form method="POST" action="/addEmployee"
+		modelAttribute="employee">
+		<table>
+			<tr>
+				<td><form:label path="id">Id</form:label></td>
+				<td><form:input path="id" />
+					<form:errors path="id" cssClass="error" /></td>
+
+			</tr>
+			<tr>
+				<td><form:label path="name">Name</form:label></td>
+				<td><form:input path="name" />
+				<form:errors path="name" cssClass="error" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="contactNumber">Contact Number</form:label></td>
+				<td><form:input path="contactNumber" />
+				<form:errors path="contactNumber" cssClass="error" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="status">Status (New)</form:label></td>
+				<td><form:checkbox path="status" /></td>
+			</tr>
+			<tr>
+				<td><form:label path="item">Items</form:label></td>
+				<td><form:checkboxes path="item" items="${items}" /><br/>
+				<form:errors path="item" cssClass="error" /></td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="Submit" /></td>
+			</tr>
+		</table>
+	</form:form>
+   </body>
+   </html>
    ```
