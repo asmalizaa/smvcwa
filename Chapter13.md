@@ -454,9 +454,103 @@ We will build a Spring Boot Rest API using Spring Data Jdbc with PostgreSQL Data
 
      ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/50074d6d-e731-40d9-a10e-5bcab97f90a5)
 
+## Transaction Management
+
+Transactions are a set of operations used to perform a logical set of work. 
+- It is the bundle of all the instructions of a logical operation.
+- A transaction usually means that the data in the database has changed.
+- One of the major uses of DBMS is to protect the user’s data from system failures.
+- It is done by ensuring that all the data is restored to a consistent state when the computer is restarted after a crash.
+- The transaction is any one execution of the user program in a DBMS.
+- One of the important properties of the transaction is that it contains a finite number of steps.
+- Executing the same program multiple times will generate multiple transactions.
+
+### Example
+
+Consider the following example of transaction operations to be performed to withdraw cash from an ATM vestibule.
+
+**Steps for ATM Transaction**
+
+ 1. Transaction Start.
+ 2. Insert your ATM card.
+ 3. Select a language for your transaction.
+ 4. Select the Savings Account option.
+ 5. Enter the amount you want to withdraw.
+ 6. Enter your secret pin.
+ 7. Wait for some time for processing.
+ 8. Collect your Cash.
+ 9. Transaction Completed.
+
+A transaction can include the following basic database access operations.
+
+- **Read/Access data (R)**: Accessing the database item from disk (where the database stored data) to memory variable.
+- **Write/Change data (W)**: Write the data item from the memory variable to the disk.
+- **Commit**: Commit is a transaction control language that is used to permanently save the changes done in a transaction
+
+### Desirable Properties of Transaction (ACID Properties)
+
+For a transaction to be performed in DBMS, it must possess several properties often called ACID properties.
+
+- A - Atomicity
+- C - Consistency
+- I - Isolation
+- D - Durability
+
+### Transaction States
+
+Transactions can be implemented using SQL queries and Servers. In the diagram, you can see how transaction states work. 
+
+![image](https://github.com/asmalizaa/smvcwa/assets/23090837/f43054d7-203b-443a-ad9e-48226d1eb2c5)
+
+**Atomicity**
+
+- States that all operations of the transaction take place at once if not, the transactions are aborted.
+- There is no midway, i.e., the transaction cannot occur partially. Each transaction is treated as one unit and either run to completion or is not executed at all.
+- Atomicity involves the following two operations:
+  - Abort: If a transaction aborts, then all the changes made are not visible.
+  - Commit: If a transaction commits then all the changes made are visible.
+
+**Consistency**
+
+- The integrity constraints are maintained so that the database is consistent before and after the transaction.
+- The execution of a transaction will leave a database in either its prior stable state or anew stable state.
+- The consistent property of database states that every transaction sees a consistent database instance.
+- The transaction is used to transform the database from one consistent state to another consistent state.
+
+**Isolation**
+
+- It shows that the data which is used at the time of execution of a transaction cannot be used by the second transaction until the first one is completed.
+- In isolation, if the transaction T1 is being executed and using the data item X, then that data item can’t be accessed by any other transaction T2 until the transaction T1 ends.
+- The concurrency control subsystem of the DBMS enforced the isolation property.
+
+**Durability**
+
+- The durability property is used to indicate the performance of the database’s consistent state. It states that the transaction made the permanent changes.
+- They cannot be lost by the erroneous operation of a faulty transaction or by the system failure. When a transaction is completed, then the database reaches a state known as the consistent state. That consistent state cannot be lost, even in the event of a system’s failure.
+- The recovery subsystem of the DBMS has the responsibility of Durability property.
+
+### Uses of Transaction Management
+
+- The DBMS is used to schedule the access of data concurrently. It means that the user can access multiple data from the database without being interfered with by each other. Transactions are used to manage concurrency.
+- It is also used to satisfy ACID properties.
+- It is used to solve Read/Write Conflicts.
+- It is used to implement Recoverability, Serializability, and Cascading.
+- Transaction Management is also used for Concurrency Control Protocols and the Locking of data.
+
+### Advantages of using a Transaction
+
+- Maintains a consistent and valid database after each transaction.
+- Makes certain that updates to the database don’t affect its dependability or accuracy.
+- Enables simultaneous use of numerous users without sacrificing data consistency.
+
+### Disadvantages of using a Transaction
+
+- It may be difficult to change the information within the transaction database by end-users.
+- We need to always roll back and start from the beginning rather than continue from the previous state.
 
 
-     
+
+
 
 
      
