@@ -392,7 +392,36 @@ public class PersonController {
 }
 ```
 
-The view components: person-details.jsp and error-person.jsp
+The view components: get-person.jsp, person-details.jsp and error-person.jsp
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Person Validator</title>
+</head>
+<body>
+	<h1 align="center">Person Validator</h1>
+	<hr />
+	<form action="/getperson" method="post">
+		<div align="center">
+			<p>
+				<label for="name">Enter Name : </label> <input type="text" id="name"
+					name="name" />
+			</p>
+			<p>
+				<label for="age">Enter Age : </label> <input type="text" id="age"
+					name="age" />
+			</p>
+			<input type="submit" value="Submit" />
+		</div>
+	</form>
+</body>
+</html>
+```
 
 ```jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8"
