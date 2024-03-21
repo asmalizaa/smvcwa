@@ -283,41 +283,126 @@ ResponseEntityExceptionHandler provides exception handlers for internal Spring e
 
 However, when building RESTful APIs, returning ModelAndView objects might not be suitable, as APIs typically require structured data formats like JSON or XML for error responses. That’s where ResponseEntityExceptionHandler comes in.
 
-## Demo
+## Example
 
-For the demo, the below handler method is intentionally returning NullPointerException.
+In this example, we are going to customize error message using MessageSource, the use Local Exception Handler.
 
-```
-@RequestMapping(value="/demo/not-exist", method = RequestMethod.GET,  headers="Accept=*/*")
-public @ResponseBody ModelAndView oneFaultyMethod()
-{
-  if(true)
-  {
-    throw new NullPointerException("This error message if for demo only.");
-  }
-  return null;
-}
-```
+1. Create error messages properties files: errormessages.properties and errormessages_de.properties
 
-If we deploy the above application and hit the URL [/SpringApplication/users/demo/not-exist] in the browser, it will show the “error” page as configured in the first section.
+   ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/9f4b1d27-d039-4cf3-b16a-43813467afe0)
 
-```
-< %@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
-< %@ taglib prefix="x" uri="http://java.sun.com/jstl/xml" %>
-< %@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-< %@ taglib prefix="sql" uri="http://java.sun.com/jstl/sql" %>
-<html>
- 
-  <head>
-    <title>This is sample error page</title>
-  </head>
-  <body>
-    <h1>This is sample error page : <c:out value="${message}"></c:out></h1>
-  </body>
-<html>
-```
+   ```
+   #errormessages.properties
+   nullpointerexception=Testing NullPointerException in Local Exception Handler
+   ```
 
-Below will be the output in the browser.
+   ```
+   #errormessages_de.properties
+   nullpointerexception=Testen von NullPointerException im lokalen Ausnahmehandler
+   ```
 
-![image](https://github.com/asmalizaa/smvcwa/assets/23090837/baa376f1-9f7c-47e7-8f8e-d768a5988517)
+2. Update the configuration class to load the resource bundle message source.
 
+   ```java
+   package com.example.model;
+
+   import org.springframework.context.annotation.Bean;
+   import org.springframework.context.annotation.ComponentScan;
+   import org.springframework.context.annotation.Configuration;
+   import org.springframework.context.support.ResourceBundleMessageSource;
+   import org.springframework.web.servlet.ViewResolver;
+   import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+   import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+   @Configuration
+   @EnableWebMvc
+   @ComponentScan("com.example.model")
+   public class BookConfig {
+   	@Bean
+   	public ViewResolver viewResolver() {
+   		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+   		resolver.setPrefix("/WEB-INF/jsp/");
+   		resolver.setSuffix(".jsp");
+   		resolver.setOrder(1);
+   		return resolver;
+   	}
+
+   	@Bean
+   	public ResourceBundleMessageSource messageSource() {
+   		var source = new ResourceBundleMessageSource();
+   		source.setBasenames("messages/errormessages");
+   		source.setUseCodeAsDefaultMessage(true);
+   		return source;
+   	}
+   }
+   ```
+3. Create the application class.
+
+   ```java
+   package com.example.model;
+
+   import org.springframework.boot.SpringApplication;
+   import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+   @SpringBootApplication
+   public class BookApp {
+   	public tatic void main(String[] args) {
+   		SpringApplication.run(BookApp.class, args);
+   	}
+   }
+   ```
+4. Create the controller class. In this class, we added codes to simulate exception being thrown.
+
+   ```java
+   package com.example.model;
+
+   import java.util.Locale;
+   import org.springframework.beans.factory.annotation.Autowired;
+   import org.springframework.context.MessageSource;
+   import org.springframework.stereotype.Controller;
+   import org.springframework.web.bind.annotation.ExceptionHandler;
+   import org.springframework.web.bind.annotation.GetMapping;
+   import org.springframework.web.servlet.ModelAndView;
+
+   @Controller
+   public class BookController {
+   	@Autowired
+   	private MessageSource messageSource;
+
+   	@GetMapping("/test")
+   	public void test() throws NullPointerException {
+   		throw new NullPointerException(messageSource.getMessage("nullpointerexception", null, Locale.ENGLISH));
+   	}
+
+   	// configure exception handler that only applicable to this controller
+   	@ExceptionHandler(NullPointerException.class)
+   	public ModelAndView handleNullPointerException(NullPointerException ex) {
+   		System.out.println("executing handleNullPointerException...");
+   		ModelAndView modelAndView = new ModelAndView();
+   		modelAndView.setViewName("error");
+   		modelAndView.addObject("message", ex.getMessage());
+   		return modelAndView;
+   	}
+   }
+   ```
+5. Updated the error.jsp page to display the error message.
+
+   ```
+   <html>
+   <head></head>
+   <body>
+   	<h3>Please enter the correct details</h3>
+   	<table>
+   		<tr>
+   			<td>${message}</td>
+   		</tr>
+   		<tr>
+   			<td><a href="employee">Retry</a></td>
+   		</tr>
+   	</table>
+   </body>
+   </html>
+   ```
+6. Run the application. Launch browser and type (http://localhost:8080/test) Verify the error page displayed.
+
+   ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/0185ccb9-cecf-4d25-b91b-2430aab286c3)
