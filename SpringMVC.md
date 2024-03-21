@@ -71,8 +71,7 @@ public class MainWebAppInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(final ServletContext sc) throws ServletException {
 
-        AnnotationConfigWebApplicationContext root = 
-          new AnnotationConfigWebApplicationContext();
+        AnnotationConfigWebApplicationContext root = new AnnotationConfigWebApplicationContext();
         
         root.scan("com.example");
         sc.addListener(new ContextLoaderListener(root));
@@ -119,7 +118,6 @@ public class SampleController {
     public String showForm() {
         return "sample";
     }
-
 }
 ```
 
@@ -128,7 +126,6 @@ And the corresponding JSP resource is the sample.jsp file:
 ```jsp
 <html>
    <head></head>
-
    <body>
       <h1>This is the body of the sample view</h1>	
    </body>
