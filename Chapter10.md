@@ -457,7 +457,7 @@ In this activity, we are going to update Employee application to include validat
 
 1. Add dependency for validation.
 
-   ```
+   ```xml
    <dependency>
    	<groupId>org.springframework.boot</groupId>
    	<artifactId>spring-boot-starter-validation</artifactId>
@@ -619,7 +619,7 @@ In this activity, we are going to update Employee application to include validat
 
 4. Update the form view to include codes to display error messages.
 
-   ```
+   ```xml
    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
    <html>
    <head>
