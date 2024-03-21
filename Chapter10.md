@@ -92,17 +92,17 @@ You will build a simple Spring MVC application that takes user input and checks 
 
 1. Create a new project using Spring Initialzr with below configurations.
 
-   Project: Maven
-   Language: Java
-   Spring Boot: default
-   Group: default
-   Artifact: formvalidationdemo
-   Name: formvalidationdemo
-   Description: default
-   Package Name: com.example.demo
-   Packaging: jar
-   Java: 21 (or choose the version installed on your machine)
-   Dependencies: Spring Web, Spring Boot DevTools, Thymeleaf, and Validation
+   - Project: Maven
+   - Language: Java
+   - Spring Boot: default
+   - Group: default
+   - Artifact: formvalidationdemo
+   - Name: formvalidationdemo
+   - Description: default
+   - Package Name: com.example.demo
+   - Packaging: jar
+   - Java: 21 (or choose the version installed on your machine)
+   - Dependencies: Spring Web, Spring Boot DevTools, Thymeleaf, and Validation
 
    Generate the project. Once the generated file downloaded, extract and import into your eclipse.
 
