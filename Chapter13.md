@@ -401,3 +401,83 @@ We will build a Spring Boot Rest API using Spring Data Jdbc with PostgreSQL Data
    – We use @Autowired to inject TutorialRepository bean to local variable.
 
 7. Run and test using Postman.
+
+   - Create a new tutorial.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/0860c787-451a-48bf-8e80-50d92c1cc53d)
+
+     Verify new record added to table.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/d2634e3b-5c50-4504-ae50-15cf2b7a6ec3)
+
+     Try added few more tutorials.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/05101ddd-2e8e-471e-a085-c2cd687825e5)
+
+   - Try get all tutorials.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/76fedded-6a15-4a1f-9f32-21d0a5f00ac1)
+
+   - Try a tutorial by id.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/2b252a9b-3af2-4fdc-b6c0-116b969d42ce)
+
+   - Update a tutorial by id.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/40d6b82d-91d6-463a-a635-b9c39e52ac14)
+
+     Verify in table the record has been updated.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/75c87af1-e92b-4b2a-95a3-c2c524d0d131)
+
+   - Find tutorial that has been published.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/d2ce7f9e-b8ed-43f3-a684-2a760f5e0be1)
+
+   - Find tutorials which title contains string 'Java'
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/398452eb-ee40-4cc7-be30-4a5d64b0533b)
+
+   - Delete a tutorial by id.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/a1c284b7-3547-46fb-941f-e1c97f255a81)
+
+     Verify in table that record has been deleted.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/0f9e9508-b3e6-4286-949e-b1b4611a3ae0)
+
+   - Delete all tutorials.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/ad2dcd06-98b4-4ced-a1f1-c74e57388bf4)
+
+     Verify that the table is now empty.
+
+     ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/50074d6d-e731-40d9-a10e-5bcab97f90a5)
+
+
+
+     
+
+
+     
+
+
+
+
+     
+
+
+
+     
+
+
+
+
+
+     
+
+
+     
+
+
+     
