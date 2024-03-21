@@ -27,4 +27,117 @@ Interceptor classes have the same lifecycle as their associated target class. Wh
 
 Reference: (https://www.geeksforgeeks.org/spring-boot-interceptor/)
 
+1. Create a new project using Spring Initialzr with below configurations.
+
+   - Project: Maven
+   - Language: Java
+   - Spring Boot: default
+   - Group: default
+   - Artifact: interceptordemo
+   - Name: interceptordemo
+   - Description: default
+   - Package Name: com.example.interceptordemo
+   - Packaging: jar
+   - Java: 21 (or choose the version installed on your machine)
+   - Dependencies: Spring Web, Spring Boot DevTools
+
+   Generate the project. Once the generated file downloaded, extract and import into your eclipse.
+
+2. The Model.
+
+   ```java
+   package com.example.interceptordemo;
+
+   public class Student {
+       private int id;
+       private String firstName;
+       private String lastName;
+
+       public Student() {
+       }
+
+       public Student(int id, String firstName, String lastName) {
+           this.id = id;
+           this.firstName = firstName;
+           this.lastName = lastName;
+       }
+
+       public int getId() {
+           return id;
+       }
+
+       public void setId(int id) {
+           this.id = id;
+       }
+
+       public String getFirstName() {
+           return firstName;
+       }
+
+       public void setFirstName(String firstName) {
+           this.firstName = firstName;
+       }
+
+       public String getLastName() {
+           return lastName;
+       }
+
+       public void setLastName(String lastName) {
+           this.lastName = lastName;
+       }
+
+       @Override
+       public String toString() {
+           return "Id: " + getId() + "\nFirst Name: " + getFirstName() + "\nLast Name: " + getLastName() + "\n";
+       }
+   }
+   ```
+
+3. Configuration class.
+
+   ```java
+   package com.example.interceptordemo;
+
+   import org.springframework.context.annotation.Configuration;
+   import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+   import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+   @Configuration
+   public class RequestInterceptorConfig implements WebMvcConfigurer {
+
+       // Register an interceptor with the registry, Interceptor name : RequestInterceptor
+       @Override
+       public void addInterceptors(InterceptorRegistry registry) {
+           registry.addInterceptor(new RequestInterceptor());
+       }
+       // * We can register any number of interceptors with our spring application context
+   }
+   ```
+
+4. Request Interceptor class.
+
+   Request Interceptor is an additional component class that intercepts all the incoming and outgoing requests (before any action is performed). It has the following 3 methods :
+
+   1. preHandle(): When an interceptor is implemented, any request before reaching the desired controller will be intercepted by this interceptor and some pre-processing can be performed like logging, authentication, redirection, etc.
+
+      - This method takes 3 parameters :
+        - HttpServletRequest request – represents the request being handled,
+        - HttpServletResponse response – represents the HTTP response to be sent back to the client,
+        - Object handler – the target controller method that will handle this request.
+      - Boolean return type: If the method returns true then the request will be directed towards the target control else the target controller method won’t be invoked if this method returns false and the request will be halted.
+    2. postHandle(): This method is executed after the request is served but just before the response is sent back to the client. It intercepts the request in the final stage, giving us a chance to make any final trivial adjustments.
+
+We can modify the view response, for certain specific conditions.
+It takes 4 parameters –
+3 are same as previous but there is one more
+‘ModelAndView’. It contains information about the model (data that is shipped across the parts of our web application) and the view that is rendered by the client.
+It can be used for debugging, logging, and capturing final response data.
+3. afterCompletion(): This method is executed after the request and response mechanism is completed.
+
+This method can turn out to be very useful in cleaning up the resources once the request is served completely.
+It also takes 4 parameters, but the ‘ModelAndView’ object is replaced by an Exception object which contains information if any Exceptions occurred while serving the request.
+@Component annotation tells the component scanning mechanism that this class should be registered for component scanning.
+
+   ```java
+   ```
 
