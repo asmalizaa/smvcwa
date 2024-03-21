@@ -52,3 +52,7 @@ We will build a Spring Boot Rest API using Spring Data Jdbc with PostgreSQL Data
           <td>find all Tutorials which title contains keyword</td>
       </tr>
   </table>
+
+– We make CRUD operations & finder methods with Spring Data Jdbc.
+– The database will be PostgreSQL by configuring project dependency & datasource.
+
