@@ -127,17 +127,74 @@ Reference: (https://www.geeksforgeeks.org/spring-boot-interceptor/)
       - Boolean return type: If the method returns true then the request will be directed towards the target control else the target controller method won’t be invoked if this method returns false and the request will be halted.
     2. postHandle(): This method is executed after the request is served but just before the response is sent back to the client. It intercepts the request in the final stage, giving us a chance to make any final trivial adjustments.
 
-We can modify the view response, for certain specific conditions.
-It takes 4 parameters –
-3 are same as previous but there is one more
-‘ModelAndView’. It contains information about the model (data that is shipped across the parts of our web application) and the view that is rendered by the client.
-It can be used for debugging, logging, and capturing final response data.
-3. afterCompletion(): This method is executed after the request and response mechanism is completed.
+       - We can modify the view response, for certain specific conditions.
+       - It takes 4 parameters:
+         - 3 are same as previous but there is one more
+         - 'ModelAndView'. It contains information about the model (data that is shipped across the parts of our web application) and the view that is rendered by the client.
+       - It can be used for debugging, logging, and capturing final response data.
 
-This method can turn out to be very useful in cleaning up the resources once the request is served completely.
-It also takes 4 parameters, but the ‘ModelAndView’ object is replaced by an Exception object which contains information if any Exceptions occurred while serving the request.
+   3. afterCompletion(): This method is executed after the request and response mechanism is completed.
+      - This method can turn out to be very useful in cleaning up the resources once the request is served completely.
+      - It also takes 4 parameters, but the 'ModelAndView' object is replaced by an Exception object which contains information if any Exceptions occurred while serving the request.
+
 @Component annotation tells the component scanning mechanism that this class should be registered for component scanning.
 
    ```java
+   package com.example.interceptordemo;
+
+   import org.springframework.stereotype.Component;
+   import org.springframework.web.servlet.HandlerInterceptor;
+   import org.springframework.web.servlet.ModelAndView;
+   import jakarta.servlet.http.HttpServletRequest;
+   import jakarta.servlet.http.HttpServletResponse;
+
+   @Component
+   public class RequestInterceptor implements HandlerInterceptor {
+        // Request is intercepted by this method before reaching the Controller
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+
+		// * Business logic just when the request is received and intercepted by this
+		// interceptor before reaching the controller
+		try {
+			System.out.println("1 - preHandle() : Before sending request to the Controller");
+			System.out.println("Method Type: " + request.getMethod());
+			System.out.println("Request URL: " + request.getRequestURI());
+		}
+		// * If the Exception is caught, this method will return false
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	// Response is intercepted by this method before reaching the client
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+			ModelAndView modelAndView) throws Exception {
+		// * Business logic just before the response reaches the client and the request
+		// is served
+		try {
+			System.out.println(
+					"2 - postHandle() : After the Controller serves the request (before returning back response to the client)");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// This method is called after request & response HTTP communication is done.
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+			throws Exception {
+		// * Business logic after request and response is Completed
+		try {
+			System.out.println("3 - afterCompletion() : After the request and Response is completed");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
    ```
 
