@@ -667,3 +667,9 @@ In this activity, we are going to update Employee application to include validat
    </body>
    </html>
    ```
+5. Run the application. Launch browser and type (http://localhost:8080/employee)
+
+   Try to submit an empty form, verify that the error message displayed in the form view.
+
+   ![image](https://github.com/asmalizaa/smvcwa/assets/23090837/ba9a7717-e404-45d5-8884-408cfab24a06)
+   
