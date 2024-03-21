@@ -451,3 +451,102 @@ The view components: get-person.jsp, person-details.jsp and error-person.jsp
 </html>
 ```
    
+## Activity
+
+In this activity, we are going to update Employee application to include validations.
+
+1. Add dependency for validation.
+
+   ```
+   <dependency>
+   	<groupId>org.springframework.boot</groupId>
+   	<artifactId>spring-boot-starter-validation</artifactId>
+   </dependency>
+   ```
+
+2. Update the model Employee.java to add the validation annotations.
+
+   ```java
+   package com.example.webdemo.forms;
+
+   import jakarta.validation.constraints.Max;
+   import jakarta.validation.constraints.Min;
+   import jakarta.validation.constraints.NotNull;
+   import jakarta.validation.constraints.Size;
+
+   public class Employee {
+   	@NotNull
+   	@Min(value = 1)
+   	@Max(value = 100)
+   	private long id;
+
+   	@NotNull
+   	@Size(min = 5, max = 50)
+   	private String name;
+
+   	@NotNull
+   	@Size(min = 5, max = 20)
+   	private String contactNumber;
+
+   	private boolean status;
+
+   	@NotNull
+   	private String item;
+
+   	public Employee() {
+   	}
+
+   	public Employee(long id, String name, String contactNumber, boolean status, String item) {
+   		this.id = id;
+   		this.name = name;
+   		this.contactNumber = contactNumber;
+   		this.status = status;
+   		this.item = item;
+   	}
+
+   	public long getId() {
+   		return id;
+   	}
+
+   	public void setId(long id) {
+   		this.id = id;
+   	}
+
+   	public String getName() {
+   		return name;
+   	}
+
+   	public void setName(String name) {
+   		this.name = name;
+   	}
+
+   	public String getContactNumber() {
+   		return contactNumber;
+   	}
+
+   	public void setContactNumber(String contactNumber) {
+   		this.contactNumber = contactNumber;
+   	}
+
+   	@Override
+   	public String toString() {
+   		return "Id: " + getId() + "\nName: " + getName() + "\nContact Number: " + getContactNumber() + "\nStatus: " + isStatus() + "\nItem: " + getItem() + "\n";
+   	}
+
+   	public boolean isStatus() {
+   		return status;
+   	}
+
+   	public void setStatus(boolean status) {
+   		this.status = status;
+   	}
+
+   	public String getItem() {
+   		return item;
+   	}
+
+   	public void setItem(String item) {
+   		this.item = item;
+   	}
+   }
+   ```
