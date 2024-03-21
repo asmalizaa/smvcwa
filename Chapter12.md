@@ -23,4 +23,8 @@ Interceptor classes may be targets of dependency injection. Dependency injection
 
 Interceptor classes have the same lifecycle as their associated target class. When a target class instance is created, an interceptor class instance is also created for each declared interceptor class in the target class. That is, if the target class declares multiple interceptor classes, an instance of each class is created when the target class instance is created. The target class instance and all interceptor class instances are fully instantiated before any @PostConstruct callbacks are invoked, and any @PreDestroy callbacks are invoked before the target class and interceptor class instances are destroyed.
 
+## Example
+
+Reference: (https://www.geeksforgeeks.org/spring-boot-interceptor/)
+
 
