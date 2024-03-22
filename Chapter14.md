@@ -175,7 +175,7 @@ Reference: (https://bezkoder.com/spring-boot-postgresql-example/)
    Let us create a repository to interact with Tutorials from the database.
 
    ```java
-   package com.example.springbootjpademo;
+   package com.example.jpademo;
 
    import java.util.List;
    import org.springframework.data.jpa.repository.JpaRepository;
@@ -196,7 +196,7 @@ Reference: (https://bezkoder.com/spring-boot-postgresql-example/)
    Finally, we create a controller that provides APIs for creating, retrieving, updating, deleting and finding Tutorials.
 
    ```java
-   package com.example.springbootjpademo;
+   package com.example.jpademo;
 
    import java.util.ArrayList;
    import java.util.List;
