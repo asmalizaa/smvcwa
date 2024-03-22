@@ -487,7 +487,7 @@ A transaction can include the following basic database access operations.
 - **Write/Change data (W)**: Write the data item from the memory variable to the disk.
 - **Commit**: Commit is a transaction control language that is used to permanently save the changes done in a transaction
 
-### Desirable Properties of Transaction (ACID Properties)
+## Desirable Properties of Transaction (ACID Properties)
 
 For a transaction to be performed in DBMS, it must possess several properties often called ACID properties.
 
@@ -496,7 +496,7 @@ For a transaction to be performed in DBMS, it must possess several properties of
 - I - Isolation
 - D - Durability
 
-### Transaction States
+## Transaction States
 
 Transactions can be implemented using SQL queries and Servers. In the diagram, you can see how transaction states work. 
 
@@ -529,7 +529,7 @@ Transactions can be implemented using SQL queries and Servers. In the diagram, y
 - They cannot be lost by the erroneous operation of a faulty transaction or by the system failure. When a transaction is completed, then the database reaches a state known as the consistent state. That consistent state cannot be lost, even in the event of a system’s failure.
 - The recovery subsystem of the DBMS has the responsibility of Durability property.
 
-### Uses of Transaction Management
+## Uses of Transaction Management
 
 - The DBMS is used to schedule the access of data concurrently. It means that the user can access multiple data from the database without being interfered with by each other. Transactions are used to manage concurrency.
 - It is also used to satisfy ACID properties.
@@ -537,18 +537,42 @@ Transactions can be implemented using SQL queries and Servers. In the diagram, y
 - It is used to implement Recoverability, Serializability, and Cascading.
 - Transaction Management is also used for Concurrency Control Protocols and the Locking of data.
 
-### Advantages of using a Transaction
+## Advantages of using a Transaction
 
 - Maintains a consistent and valid database after each transaction.
 - Makes certain that updates to the database don’t affect its dependability or accuracy.
 - Enables simultaneous use of numerous users without sacrificing data consistency.
 
-### Disadvantages of using a Transaction
+## Disadvantages of using a Transaction
 
 - It may be difficult to change the information within the transaction database by end-users.
 - We need to always roll back and start from the beginning rather than continue from the previous state.
 
+## Spring Transaction Management JDBC Example
 
+Reference: (https://www.digitalocean.com/community/tutorials/spring-transaction-management-jdbc-example)
+
+We will create a simple Spring JDBC project where we will update multiple tables in a single transaction. The transaction should commit only when all the JDBC statements execute successfully otherwise it should rollback to avoid data inconsistency. 
+
+1. Database setup.
+
+   We will create two tables for our use and update both of them in a single transaction.
+
+   ```sql
+   CREATE TABLE `Customer` (
+   `id` int(11) unsigned NOT NULL,
+   `name` varchar(20) DEFAULT NULL,
+   PRIMARY KEY (`id`)
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+   ```
+   ```
+   CREATE TABLE `Address` (
+   `id` int(11) unsigned NOT NULL,
+   `address` varchar(20) DEFAULT NULL,
+   `country` varchar(20) DEFAULT NULL,
+   PRIMARY KEY (`id`)
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+   ```
 
 
 
