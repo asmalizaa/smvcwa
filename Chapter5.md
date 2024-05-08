@@ -405,15 +405,6 @@ public class Transport {
 }
 ```
 
-Add below codes to configuration class.
-
-```java
-	@Bean
-	public Motorcycle getKawasaki() {
-		return new Motorcycle("Z900", "Kawasaki", true);
-	}
-```
-
 Finally, update the application class.
 
 ```java
@@ -482,6 +473,15 @@ Then, to test it, update the Transport class to use Motorcycle as the generic ty
 ```java
 @Autowired
 private List<Motorcycle> vehicles;
+```
+
+Add below codes to configuration class.
+
+```java
+	@Bean
+	public Motorcycle getKawasaki() {
+		return new Motorcycle("Z900", "Kawasaki", true);
+	}
 ```
 
 Run the application and verify the output now contain details of the Motorcycle object instead.
