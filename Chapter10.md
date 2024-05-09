@@ -358,11 +358,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class PersonController {
@@ -381,8 +382,9 @@ public class PersonController {
 	}
 
 	@PostMapping("/getperson")
-	public String getPersonDetails(@Validated Person person, Model model, BindingResult result) {
+	public String getPersonDetails(@Valid Person person, BindingResult result, Model model) {
 		if (result.hasErrors()) {
+			System.out.println();
 			return "error-person";
 		}
 		model.addAttribute("name", person.getName());
